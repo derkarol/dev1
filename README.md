@@ -1,1 +1,1 @@
-# ts_chid
+# ts_child
