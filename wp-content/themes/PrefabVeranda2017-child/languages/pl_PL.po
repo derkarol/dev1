@@ -1,0 +1,67 @@
+# Translation of Themes - Twenty Seventeen in Polish
+# This file is distributed under the same license as the Themes - Twenty Seventeen package.
+msgid ""
+msgstr ""
+"PO-Revision-Date: 2018-06-09 14:14+0200\n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=UTF-8\n"
+"Content-Transfer-Encoding: 8bit\n"
+"Plural-Forms: nplurals=3; plural=(n==1 ? 0 : n%10>=2 && n%10<=4 && (n%100<10 || n%100>=20) ? 1 : 2);\n"
+"X-Generator: Poedit 2.0.7\n"
+"Language: pl\n"
+"Project-Id-Version: Themes - Twenty Seventeen\n"
+"POT-Creation-Date: \n"
+"Last-Translator: \n"
+"Language-Team: \n"
+
+#. For product board
+msgid "Dimensions"
+msgstr "Wymiary"
+
+#. For product board
+msgid "Length"
+msgstr "Długość"
+
+#. For product board
+msgid "Depth"
+msgstr "Głębokość"
+
+#. For product board
+msgid "Colour"
+msgstr "Kolor"
+
+#. For product board
+msgid "Windows/Doors"
+msgstr "Okna/Drzwi"
+
+#. For product board
+msgid "Types"
+msgstr "Typy"
+
+#. For product board
+msgid "Roof"
+msgstr "Dach"
+
+#. For product board
+msgid "Roof structure"
+msgstr "Struktura dachu"
+
+#. For product board
+msgid "Scheduled for"
+msgstr "Przewidziane dla"
+
+#. For product board
+msgid "Required glazing"
+msgstr "Wymagane szklenie"
+
+#. For product board
+msgid "Our price"
+msgstr "Nasza cena"
+
+#. For product board
+msgid "Calculated for"
+msgstr "Wycena w wersji"
+
+#. For product board
+msgid "*at production"
+msgstr "*cena produkcyjna"

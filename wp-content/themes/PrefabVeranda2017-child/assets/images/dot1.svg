@@ -1,0 +1,28 @@
+<svg id="svg2" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" viewBox="0 0 70.9 70.9">
+  <defs>
+    <pattern id="dot1" data-name="dot1" width="28.3" height="28.35" patternUnits="userSpaceOnUse" viewBox="0 0 28.3 28.3">
+      <rect width="28.3" height="28.35" fill="none"/>
+      <g>
+        <circle cx="28.6" cy="28.6" r="0.7" fill="#0077a4"/>
+        <circle cx="14.2" cy="28.6" r="0.7" fill="#0077a4"/>
+        <circle cx="28.6" cy="14.2" r="0.7" fill="#0077a4"/>
+        <circle cx="14.2" cy="14.2" r="0.7" fill="#0077a4"/>
+        <circle cx="7" cy="21.4" r="0.7" fill="#0077a4"/>
+        <circle cx="21.4" cy="21.4" r="0.7" fill="#0077a4"/>
+        <circle cx="7" cy="7" r="0.7" fill="#0077a4"/>
+        <circle cx="21.4" cy="7" r="0.7" fill="#0077a4"/>
+      </g>
+      <g>
+        <circle cx="0.2" cy="28.6" r="0.7" fill="#0077a4"/>
+        <circle cx="0.2" cy="14.2" r="0.7" fill="#0077a4"/>
+      </g>
+      <g>
+        <circle cx="28.6" cy="0.2" r="0.7" fill="#0077a4"/>
+        <circle cx="14.2" cy="0.2" r="0.7" fill="#0077a4"/>
+      </g>
+      <circle cx="0.2" cy="0.2" r="0.7" fill="#0077a4"/>
+    </pattern>
+  </defs>
+  <title>France_snow</title>
+  <rect width="70.9" height="70.87" fill="url(#dot1)"/>
+</svg>

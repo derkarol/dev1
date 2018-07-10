@@ -1,0 +1,191 @@
+@import 'colors';
+@import 'vars';
+@import 'mixins';
+@import 'typography';
+@import 'css--reset';
+@import 'import-once';
+
+@mixin css--my-styles {
+//  body {
+//    @include reset;
+//    @include font-family;
+//    color: $text-01;
+//    background-color: $ui-02;
+//    line-height: 1;
+//  }
+	
+.my-icon {
+	width: 100%; /*<O.O> according to tut-article*/
+	height: 100%;
+	margin: auto;
+	width: 100px;	
+}
+.box .my-icon {
+	width: 100%; /*<O.O> according to tut-article*/
+	height: 73m;
+	margin: auto;
+	width: 100px;	
+}
+.site-branding {
+	position: relative;
+	display: block;
+	text-align: center;
+	height: 100%;
+	padding-bottom: 15vh ;	
+}
+
+.site-title {
+	position: relative;
+	clear: none;
+//	font-family: var($font-path-2);
+	font-size: 5vw;
+	font-weight: 800;
+	line-height: 1.66;
+	letter-spacing: 0.25em;
+	margin: 0;	
+	text-transform: uppercase;
+}
+.site-description {
+	letter-spacing: 0.20vw;
+	padding-bottom: 1vh;
+}
+
+/*login-navigation based on main-navigation navigation center, justi..*/
+.navigation-top {
+    border-bottom: none; 
+    border-top: none;
+	z-index: 10;
+	flex: 1;
+	}
+.navigation-top {
+	div {
+		background: #fff;
+	}
+	li {	
+		border-right: 1px solid #eee;
+		letter-spacing: 0.25em;  
+	}
+	a {
+		font-weight: 300;
+	}
+}
+/* makes top bar narrow, slim*/
+.navigation-top .wrap {
+	padding-top: 0em;
+	padding-bottom: 0em;
+}
+	
+/* login button on the right based on Scroll down arrow */
+.login-right {
+	display: inline-flex;
+	top: 0em;
+	position: fixed;
+	right: 0;
+}
+.menu {
+	li {
+		a {
+			color: #222;
+			font-weight: 500;
+			-webkit-transition: color 0.2s;
+			transition: color 0.2s;
+			span{
+				font-size: 85%;
+				letter-spacing: 0.25em
+				}
+			}
+		}
+	}
+}
+#login-menu {
+	background: #fff;
+	a {
+		span {
+			font-size: 75%;
+		}
+	}
+}
+button {
+	a {
+		color: white;
+	}
+}
+#home .grid-wrapper {
+	padding-top: 44px; //nav height
+}
+#contact, #contact-3, #contactez {
+	min-height: 300px;
+	max-height: 300px;
+}
+input[type="text"] {
+	 padding: 0 2em; 	
+}
+// News panel/
+.news-image {
+//	background-color: white;
+	background-size: cover;
+	opacity: 0.5;
+	transform: scale(1);
+	transition: opacity 0.3s, transform 0.3s ease-in-out;
+	min-height: calc-height($VH, 0.2);
+	&:hover {
+//		background-color: $PV-brand-01;
+		background-size: cover;
+		opacity: 1;
+		transform: scale(1.25);
+	}
+}
+.news-image-bg {
+	background-color: $PV-brand-02;
+}
+.news-wrapper {
+	background-color: white;
+	padding: 0.5em; 
+	justify-self: end;
+	align-self: end;
+}
+.panel-image {
+	background-color: $PV-brand-02;
+	background-blend-mode: luminosity;
+	background-size: cover;	
+	height: 60vh;
+	min-height: 400px;
+}
+.reset-blend {
+	background-blend-mode: normal;
+	}
+.el {
+	cursor: pointer;
+}
+.show {
+	overflow: visible;
+	opacity: 1;	
+	max-height: 500px;
+	min-height: 10%;
+	padding: 1rem;
+}
+.hide {
+	overflow: hidden;
+	opacity: 0;
+	max-height: 0px;	
+	min-height: 0%;	
+}
+
+.bg-graphic {		 	
+	background-repeat: no-repeat;
+    background-size: cover
+}
+.site-footer {
+	background-color: $ui-05;
+}
+.page-two-column .panel-content .recent-posts {
+	clear: right;
+	float: right;
+	width: 100%; 
+}
+
+@include exports('css--my-styles') {
+  @if global-variable-exists('css--my-styles') == false or $css--my-styles == true {
+    @include css--my-styles;
+  }
+}

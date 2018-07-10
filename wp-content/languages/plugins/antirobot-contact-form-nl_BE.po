@@ -1,0 +1,195 @@
+# Translation of Plugins - AntiRobot Contact Form - Development (trunk) in French (France)
+# This file is distributed under the same license as the Plugins - AntiRobot Contact Form - Development (trunk) package.
+msgid ""
+msgstr ""
+"PO-Revision-Date: 2018-06-01 12:16+0200\n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=UTF-8\n"
+"Content-Transfer-Encoding: 8bit\n"
+"Plural-Forms: nplurals=2; plural=n > 1;\n"
+"X-Generator: Poedit 2.0.7\n"
+"Language: fr\n"
+"Project-Id-Version: Plugins - AntiRobot Contact Form - Development (trunk)\n"
+"POT-Creation-Date: \n"
+"Last-Translator: \n"
+"Language-Team: \n"
+
+#: index.php:314
+msgid "Enable or Disable Invisible reCAPTCHA. This also needs to be set at the reCAPTCHA site settings."
+msgstr " Activeer of desactiveer onzichtbaar reCAPTCHA. Dit moet ook bepaald worden in de parameters van de website reCAPTCHA."
+
+#: index.php:311
+msgid "Enable Invisible reCAPTCHA"
+msgstr "Activeer onzichtbaar reCAPTCHA"
+
+#: index.php:301 index.php:306
+msgid "Invisible reCAPTCHA"
+msgstr "Onzichtbare reCAPTCHA"
+
+#: index.php:335
+msgid "This controls the display of the placeholder attributes."
+msgstr "Hiermee bepaalt u de weergave van de kenmerken voor plaatsaanduidingen."
+
+#: index.php:332
+msgid "Show Placeholders"
+msgstr "Plaatsaanduidingen weergeven"
+
+#: index.php:322 index.php:327
+msgid "Placeholder Visibility"
+msgstr "zichtbaarheid van de plaatsaanduiding"
+
+#. Author URI of the plugin/theme
+msgid "https://pascalebeier.de/"
+msgstr "https://pascalebeier.de/"
+
+#. Author of the plugin/theme
+msgid "Pascale Beier"
+msgstr "Pascale Beier"
+
+#. Description of the plugin/theme
+msgid "AntiRobot Contact Form is a fast and simple spam-blocking contact form using the reCAPTCHA 2.0 API."
+msgstr "AntiRobot Contact Form  is een snel en simpel spam-blocking contact formulier, gebruik makend van reCAPTCHA 2.0."
+
+#. Plugin URI of the plugin/theme
+msgid "https://wordpress.org/plugins/antirobot-contact-form/"
+msgstr "https://wordpress.org/plugins/antirobot-contact-form/"
+
+#: index.php:354
+msgid "If this Plugin has done its job saving your time, <a href=\"https://wordpress.org/support/view/plugin-reviews/antirobot-contact-form#postform\">leave a review</a> and spread the word. If you want to support my coffee addiction, you can <a href=\"https://www.paypal.com/cgi-bin/webscr?cmd=_s-xclick&hosted_button_id=DCGHNCDNK4XU4\">tip me on paypal</a>.</p>"
+msgstr "Wanneer de plugin zijn job heeft gedaan en u tijd bespraart, <a href=\"https://wordpress.org/support/view/plugin-reviews/antirobot-contact-form#postform\">rédigez un avis</a> et faites passer le message. Si vous voulez soutenir mon addiction au café, vous pouvez <a href=\"https://www.paypal.com/cgi-bin/webscr?cmd=_s-xclick&hosted_button_id=DCGHNCDNK4XU4\"> stuur mij een fooi per PayPal</a>.</p>"
+
+#: index.php:352
+msgid "Did you save time?"
+msgstr "Heeft u tijd bespaart ? "
+
+#: index.php:349
+msgid "After setting up, you may insert the shortcode <code>[antirobot_contact_form]</code> on pages or posts to display the contact form."
+msgstr "na het instellen kunt u de shortcode <code> [antirobot_contact_form] </ code> op pagina's of berichten invoegen om het contactformulier weer te geven."
+
+#: index.php:347
+msgid "Usage"
+msgstr "Gebruik"
+
+#: index.php:289
+msgid "Subject"
+msgstr "Onderwerp"
+
+#: index.php:276
+msgid "Recipient"
+msgstr "Ontvanger"
+
+#: index.php:263
+msgid "Secret Key"
+msgstr "beveiligde sleutel "
+
+#: index.php:250
+msgid "Public Key"
+msgstr "Publieke sleutel "
+
+#: index.php:236
+msgid "Get your keys"
+msgstr "Verkrijg uw sleutels "
+
+#. #-#-#-#-#  tmp-antirobot-contact-form.pot (AntiRobot Contact Form 1.8.1)
+#. Plugin Name of the plugin/theme
+#: index.php:234
+msgid "AntiRobot Contact Form"
+msgstr "AntiRobot Contact Form"
+
+#: index.php:174
+msgid "Mail Delivery with wp_mail() failed. Is your web server configuration allowing to send mails?"
+msgstr "E-mailbezorging met wp_mail () is mislukt. Is de configuratie van uw webserver geschikt voor het verzenden van e-mails?"
+
+#: index.php:168
+msgid "Message successfully sent. You will receive an E-Mail confirmation soon."
+msgstr "Bericht succesvol verzonden. U ontvangt binnenkort een e-mailbevestiging."
+
+#: index.php:157
+msgid "reCAPTCHA did not authorize your request. Make sure your keys are correct."
+msgstr "reCAPTCHA heeft uw verzoek niet geautoriseerd. Zorg ervoor dat uw sleutels correct zijn.."
+
+#: index.php:148
+msgid "Please solve the reCAPTCHA before submitting the form."
+msgstr "Los de reCAPTCHA op voordat u het formulier verzendt."
+
+#: index.php:129
+msgid "You successfully sent us an E-Mail!"
+msgstr "Je hebt ons met succes een e-mail gestuurd!"
+
+#. translators: 1: Admin E-Mail 2: WordPress URL
+#: index.php:122
+msgid "You successfully sent the following message to %1$s (via %2$s)"
+msgstr "U hebt het volgende bericht met succes verzonden naar% 1 $ s (via% 2 $ s)"
+
+#. translators: 1: Sender Name 2: Sender E-Mail
+#: index.php:113
+msgid "You received a new message from %1$s <%2$s>"
+msgstr "U hebt een nieuw bericht ontvangen van% 1 $ s <% 2 $ s>"
+
+#: index.php:87 index.php:91
+msgid "Submit"
+msgstr "Verstuur"
+
+#: index.php:192
+msgid "Enter your message here"
+msgstr "Geef hier uw bericht in "
+
+#: index.php:59
+msgid "Your Message"
+msgstr "uw bericht "
+
+#: index.php:178
+msgid "mail@example.org"
+msgstr "e-mail@voorbeeld.org"
+
+#: index.php:49
+msgid "E-Mail"
+msgstr "E-mail"
+
+#: index.php:
+msgid "Company name"
+msgstr "Bedrijfsnaam"
+
+#: index.php:
+msgid "Best Company"
+msgstr "Beste bedrijf"
+
+#: index.php:
+msgid "Name *"
+msgstr "Naam*"
+
+#: index.php:
+msgid "Name Surname"
+msgstr "Naam en voornaam"
+
+#: index.php:
+msgid "Country *"
+msgstr "Land*"
+
+#: index.php:
+msgid "Country"
+msgstr "Land"
+
+#: index.php:
+msgid "Adress *"
+msgstr "Adres *"
+
+#: index.php:
+msgid "Street and Home number"
+msgstr "Straatnaam en huisnummer "
+
+#: index.php:
+msgid "Postcode and City"
+msgstr "Postcode en stad "
+
+#: index.php:
+msgid "Telephone *"
+msgstr "Telefoon*"
+
+#: index.php:
+msgid "*required"
+msgstr "*verplicht"
+
+#: index.php:
+msgid "*By submitting to this form you agree to collect and process, your data for contact purpose."
+msgstr "* Door dit formulier in te dienen, stemt u ermee in uw gegevens voor contactdoeleinden te verzamelen en te verwerken."
