@@ -1,7 +1,7 @@
 var bwg_shortcode_type;
 jQuery(document).ready(function () {
   jQuery(".mce-toolbar-grp.mce-inline-toolbar-grp.mce-container.mce-panel", parent.document).hide();
-  // Add tabs.
+  /* Add tabs. */
   jQuery(".bwg_tabs").each(function () {
     jQuery(this).tabs({
       activate: function( event, ui ) {
@@ -36,7 +36,7 @@ jQuery(document).ready(function () {
 			body.animate({ scrollTop: top }, 500 );
   });
 
-  // Changing label Number of image rows to columns in masonry view
+  /* Changing label Number of image rows to columns in masonry view */
   jQuery('input[name=masonry]').on('click', function(){
     if(jQuery(this).val() == 'horizontal') {
       jQuery('.masonry_col_num').hide();
@@ -64,6 +64,63 @@ function bwg_shortcode_load() {
     }
     return true;
   });
+}
+
+function bwg_lightbox_hide_show_params() {
+  bwg_thumb_click_action();
+  bwg_popup_fullscreen();
+  if (jQuery("input[name=popup_enable_filmstrip]:checked").val() == 1 && jQuery("#thumb_click_action_1").is(':checked')) {
+    bwg_enable_disable('', 'tr_popup_filmstrip_height', 'popup_filmstrip_yes');
+  }
+  else {
+    bwg_enable_disable('none', 'tr_popup_filmstrip_height', 'popup_filmstrip_no');
+  }
+  if (jQuery("input[name=popup_enable_ctrl_btn]:checked").val() == 1 && jQuery("#thumb_click_action_1").is(':checked')) {
+    jQuery("#tr_popup_fullscreen").css('display', '');
+    jQuery("#tr_popup_info").css('display', '');
+    jQuery("#tr_popup_download").css('display', '');
+    jQuery("#tr_popup_fullsize_image").css('display', '');
+    jQuery("#tr_popup_comment").css('display', '');
+    jQuery("#tr_comment_moderation").css('display', '');
+    jQuery("#tr_popup_email").css('display', '');
+    jQuery("#tr_popup_captcha").css('display', '');
+    jQuery("#tr_popup_facebook").css('display', '');
+    jQuery("#tr_popup_twitter").css('display', '');
+    jQuery("#tr_popup_google").css('display', '');
+    jQuery("#tr_popup_pinterest").css('display', '');
+    jQuery("#tr_popup_thumblr").css('display', '');
+  }
+  else {
+    jQuery("#tr_popup_fullscreen").css('display', 'none');
+    jQuery("#tr_popup_info").css('display', 'none');
+    jQuery("#tr_popup_download").css('display', 'none');
+    jQuery("#tr_popup_fullsize_image").css('display', 'none');
+    jQuery("#tr_popup_comment").css('display', 'none');
+    jQuery("#tr_comment_moderation").css('display', 'none');
+    jQuery("#tr_popup_email").css('display', 'none');
+    jQuery("#tr_popup_captcha").css('display', 'none');
+    jQuery("#tr_popup_facebook").css('display', 'none');
+    jQuery("#tr_popup_twitter").css('display', 'none');
+    jQuery("#tr_popup_google").css('display', 'none');
+    jQuery("#tr_popup_pinterest").css('display', 'none');
+    jQuery("#tr_popup_thumblr").css('display', 'none');
+  }
+  if (jQuery("input[name=popup_enable_comment]:checked").val() == 1 && jQuery("input[name=popup_enable_ctrl_btn]:checked").val() == 1 && jQuery("#thumb_click_action_1").is(':checked')) {
+    jQuery("#tr_popup_email").css('display', '');
+    jQuery("#tr_popup_captcha").css('display', '');
+    jQuery("#tr_comment_moderation").css('display', '');
+  }
+  else {
+    jQuery("#tr_popup_email").css('display', 'none');
+    jQuery("#tr_popup_captcha").css('display', 'none');
+    jQuery("#tr_comment_moderation").css('display', 'none');
+  }
+  if (jQuery("input[name=enable_addthis]:checked").val() == 1 && jQuery("#thumb_click_action_1").is(':checked')) {
+    jQuery("#tr_addthis_profile_id").css('display', '');
+  }
+  else {
+    jQuery("#tr_addthis_profile_id").css('display', 'none');
+  }
 }
 
 function bwg_shortcode_hide_show_params() {
@@ -149,13 +206,13 @@ function bwg_shortcode_hide_show_params() {
   if (jQuery('#slideshow_enable_ctrl_yes').is(':checked')) {
     jQuery("#tr_autohide_slideshow_navigation").show();
   }
-  if (jQuery('#image_enable_page_loadmore').is(':checked')) {
+  if (jQuery('#image_enable_page_2').is(':checked')) {
     jQuery("#tr_load_more_image_count").show();
   }
-  if (jQuery('#masonry_image_enable_page_loadmore').is(':checked')) {
+  if (jQuery('#masonry_image_enable_page_2').is(':checked')) {
     jQuery("#tr_masonry_load_more_image_count").show();
   }
-  if (jQuery('#mosaic_image_enable_page_loadmore').is(':checked')) {
+  if (jQuery('#mosaic_image_enable_page_2').is(':checked')) {
     jQuery("#tr_mosaic_load_more_image_count").show();
   }
   if (jQuery('#blog_style_enable_page_2').is(':checked')) {
@@ -221,58 +278,27 @@ function bwg_watermark(watermark_type) {
 function bwg_enable_disable(display, id, current) {
   jQuery("#" + current).prop('checked', true);
   jQuery("#" + id).css('display', display);
-  if(id == 'tr_slideshow_title_position') { 
+  if(id == 'tr_slideshow_title_position') {
     jQuery("#tr_slideshow_full_width_title").css('display', display);
   }
 }
 
 function bwg_popup_fullscreen() { 
-  if (jQuery("#popup_fullscreen_1").is(':checked')) {
-    jQuery("#tr_popup_width_height").css('display', 'none');
+  if (jQuery("#popup_fullscreen_0").is(':checked') && jQuery("#thumb_click_action_1").is(':checked')) {
+    jQuery("#tr_popup_dimensions").css('display', '');
   }
   else {
-    jQuery("#tr_popup_width_height").css('display', '');
+    jQuery("#tr_popup_dimensions").css('display', 'none');
   }
 }
 
 function bwg_thumb_click_action() {
+  jQuery('.bwg-lightbox').hide();
   if (jQuery("#thumb_click_action_1").is(':checked')) {
-    jQuery("#tr_thumb_link_target").css('display', 'none');
-    jQuery("#tbody_popup").css('display', '');
-    jQuery("#tr_popup_width_height").css('display', '');
-    jQuery("#tr_popup_effect").css('display', '');
-    jQuery("#tr_popup_interval").css('display', '');
-    jQuery("#tr_popup_enable_filmstrip").css('display', '');
-    if (jQuery("input[name=popup_enable_filmstrip]:checked").val() == 1) {
-      bwg_enable_disable('', 'tr_popup_filmstrip_height', 'popup_filmstrip_yes');
-    }
-    else {
-      bwg_enable_disable('none', 'tr_popup_filmstrip_height', 'popup_filmstrip_no');
-    }
-    jQuery("#tr_popup_enable_ctrl_btn").css('display', '');
-    if (jQuery("input[name=popup_enable_ctrl_btn]:checked").val() == 1) {
-      bwg_enable_disable('', 'tbody_popup_ctrl_btn', 'popup_ctrl_btn_yes');
-    }
-    else {
-      bwg_enable_disable('none', 'tbody_popup_ctrl_btn', 'popup_ctrl_btn_no');
-    }
-    jQuery("#tr_popup_enable_fullscreen").css('display', '');
-    jQuery("#tr_popup_enable_info").css('display', '');
-    jQuery("#tr_popup_enable_rate").css('display', '');
-    jQuery("#tr_popup_enable_comment").css('display', '');
-    jQuery("#tr_popup_enable_facebook").css('display', '');
-    jQuery("#tr_popup_enable_twitter").css('display', '');
-    jQuery("#tr_popup_enable_google").css('display', '');
-    jQuery("#tr_popup_enable_ecommerce").css('display', '');
-    jQuery("#tr_popup_enable_pinterest").css('display', '');
-    jQuery("#tr_popup_enable_tumblr").css('display', '');
-    bwg_popup_fullscreen();
+    jQuery('.bwg-lightbox-lightbox').show();
   }
-  else {
-    jQuery("#tr_thumb_link_target").css('display', jQuery("#thumb_click_action_2").is(':checked') ? '' : 'none');
-    jQuery("#tbody_popup").css('display', 'none');
-    jQuery("#tbody_popup_ctrl_btn").css('display', 'none');
-    jQuery("#tr_popup_enable_ctrl_btn").css('display', 'none');
+  else if (jQuery("#thumb_click_action_2").is(':checked')) {
+    jQuery('.bwg-lightbox-redirect').show();
   }
 }
 
@@ -346,28 +372,7 @@ function bwg_gallery_type(gallery_type) {
   jQuery("#tr_ecommerce_icon_hover .ecommerce_icon_show").css('display', 'none');
   jQuery("#tr_tag").css('display', 'none');
 
-  // Popup.
-  jQuery("#tbody_popup").css('display', 'none');
-  jQuery("#tr_popup_width_height").css('display', 'none');
-  jQuery("#tr_popup_effect").css('display', 'none');
-  jQuery("#tr_popup_interval").css('display', 'none');
-  jQuery("#tr_popup_enable_filmstrip").css('display', 'none');
-  jQuery("#tr_popup_filmstrip_height").css('display', 'none');
-  jQuery("#tr_popup_enable_ctrl_btn").css('display', 'none');
-  jQuery("#tr_popup_enable_fullscreen").css('display', 'none');
-  jQuery("#tr_popup_enable_info").css('display', 'none');
-  jQuery("#tr_popup_info_full_width").css('display', 'none');
-  jQuery("#tr_popup_enable_rate").css('display', 'none');
-  jQuery("#tr_popup_enable_comment").css('display', 'none');
-  jQuery("#tr_popup_enable_facebook").css('display', 'none');
-  jQuery("#tr_popup_enable_twitter").css('display', 'none');
-  jQuery("#tr_popup_enable_google").css('display', 'none');
-  jQuery("#tr_popup_enable_ecommerce").css('display', 'none');
-  jQuery("#tr_popup_enable_pinterest").css('display', 'none');
-  jQuery("#tr_popup_enable_tumblr").css('display', 'none');
-  jQuery("#tr_popup_info_always_show").css('display', 'none');
-
-  // Watermark.
+  /* Watermark. */
   jQuery("#tr_watermark_type").css('display', '');
   if (jQuery("input[name=watermark_type]:checked").val() == 'image') {
     bwg_watermark('watermark_type_image');
@@ -378,7 +383,7 @@ function bwg_gallery_type(gallery_type) {
   else {
     bwg_watermark('watermark_type_none');
   }
-  jQuery('.gallery_options').hide();
+  jQuery('.gallery_options, .album_options').hide();
   jQuery('#' + gallery_type + '_options').show();
   switch (gallery_type) {
     case 'thumbnails': {
@@ -388,10 +393,10 @@ function bwg_gallery_type(gallery_type) {
       jQuery("#tr_ecommerce_icon_hover .ecommerce_icon_show").css('display', '');  
       jQuery("#tr_tag").css('display', '');
       jQuery("#bwg_pro_version").html('Thumbnails');
-      jQuery("#bwg_pro_version_link").attr("href", "http://wpdemo.web-dorado.com/thumbnails-view-2/");
+      jQuery("#bwg_pro_version_link").attr("href", "https://demo.10web.io/photo-gallery/");
       jQuery(".wd-free-msg").hide();
       jQuery("#insert").attr("style", "visibility: visible;");
-      jQuery(".bwg-pro-views").show();
+      jQuery(".bwg-section.bwg-pro-views").show();
       break;
     }
     case 'thumbnails_masonry': {
@@ -400,7 +405,7 @@ function bwg_gallery_type(gallery_type) {
       jQuery("#tr_gallery").css('display', '');
       jQuery("#tr_tag").css('display', '');
       jQuery("#bwg_pro_version").html('Masonry');
-      jQuery("#bwg_pro_version_link").attr("href", "http://wpdemo.web-dorado.com/masonry-view/");
+      jQuery("#bwg_pro_version_link").attr("href", "https://demo.10web.io/photo-gallery/masonry/");
       jQuery(".wd-free-msg").show();
       if ( jQuery(".wd-free-msg").length != 0 ) {
         jQuery("#insert").attr("style", "visibility: hidden;");
@@ -410,11 +415,11 @@ function bwg_gallery_type(gallery_type) {
     }
     case 'thumbnails_mosaic': {
       jQuery('#options_link').attr('href', jQuery('#options_link').attr('data-href') + '&active_tab=1&gallery_type=' + gallery_type);
-	    jQuery("#tr_ecommerce_icon_hover ").css('display', '');
+  	  jQuery("#tr_ecommerce_icon_hover ").css('display', '');
       jQuery("#tr_gallery").css('display', '');
       jQuery("#tr_tag").css('display', '');
       jQuery("#bwg_pro_version").html('Mosaic');
-      jQuery("#bwg_pro_version_link").attr("href", "http://wpdemo.web-dorado.com/mosaic-view/");
+      jQuery("#bwg_pro_version_link").attr("href", "https://demo.10web.io/photo-gallery/mosaic/");
       jQuery(".wd-free-msg").show();
       if ( jQuery(".wd-free-msg").length != 0 ) {
         jQuery("#insert").attr("style", "visibility: hidden;");
@@ -427,10 +432,10 @@ function bwg_gallery_type(gallery_type) {
       jQuery("#tr_gallery").css('display', '');
       jQuery("#tr_tag").css('display', '');
       jQuery("#bwg_pro_version").html('Slideshow');
-      jQuery("#bwg_pro_version_link").attr("href", "http://wpdemo.web-dorado.com/slideshow-view/");
+      jQuery("#bwg_pro_version_link").attr("href", "https://demo.10web.io/photo-gallery/slideshow/");
       jQuery(".wd-free-msg").hide();
       jQuery("#insert").attr("style", "visibility: visible;");
-      jQuery(".bwg-pro-views").show();
+      jQuery(".bwg-section.bwg-pro-views").show();
       break;
     }
     case 'image_browser': {
@@ -438,10 +443,10 @@ function bwg_gallery_type(gallery_type) {
       jQuery("#tr_gallery").css('display', '');
       jQuery("#tr_tag").css('display', '');
       jQuery("#bwg_pro_version").html('Image browser');
-      jQuery("#bwg_pro_version_link").attr("href", "http://wpdemo.web-dorado.com/image-browser-view/");
+      jQuery("#bwg_pro_version_link").attr("href", "https://demo.10web.io/photo-gallery/image-browser/");
       jQuery(".wd-free-msg").hide();
       jQuery("#insert").attr("style", "visibility: visible;");
-      jQuery(".bwg-pro-views").show();
+      jQuery(".bwg-section.bwg-pro-views").show();
       break;
     }
     case 'album_compact_preview': {
@@ -449,27 +454,27 @@ function bwg_gallery_type(gallery_type) {
       jQuery("#tr_album").css('display', '');
       basic_metabox_title.text(basic_metabox_title.attr('data-title-album'));
       jQuery("#bwg_pro_version").html('Compuct gallery group');
-      jQuery("#bwg_pro_version_link").attr("href", "http://wpdemo.web-dorado.com/compact-album-view/");
+      jQuery("#bwg_pro_version_link").attr("href", "https://demo.10web.io/photo-gallery/compact-album/");
       jQuery(".wd-free-msg").hide();
       jQuery("#insert").attr("style", "visibility: visible;");
-      jQuery(".bwg-pro-views").show();
+      jQuery(".bwg-section.bwg-pro-views").show();
       break;
     }
     case 'album_extended_preview': {
       jQuery('#options_link').attr('href', jQuery('#options_link').attr('data-href') + '&active_tab=2&album_type=' + gallery_type);
       jQuery("#tr_album").css('display', '');
       jQuery("#bwg_pro_version").html('Extended gallery group');
-      jQuery("#bwg_pro_version_link").attr("href", "http://wpdemo.web-dorado.com/extended-album-view/");
+      jQuery("#bwg_pro_version_link").attr("href", "https://demo.10web.io/photo-gallery/extended-album/");
       jQuery(".wd-free-msg").hide();
       jQuery("#insert").attr("style", "visibility: visible;");
-      jQuery(".bwg-pro-views").show();
+      jQuery(".bwg-section.bwg-pro-views").show();
       break;
     }
-		case 'album_masonry_preview': {
+	case 'album_masonry_preview': {
       jQuery('#options_link').attr('href', jQuery('#options_link').attr('data-href') + '&active_tab=2&album_type=' + gallery_type);
       jQuery("#tr_album").css('display', '');
       jQuery("#bwg_pro_version").html('Masonry gallery group');
-      jQuery("#bwg_pro_version_link").attr("href", "http://wpdemo.web-dorado.com/masonry-album-view/");
+      jQuery("#bwg_pro_version_link").attr("href", "https://demo.10web.io/photo-gallery/compact-album/");
       jQuery(".wd-free-msg").show();
       if ( jQuery(".wd-free-msg").length != 0 ) {
         jQuery("#insert").attr("style", "visibility: hidden;");
@@ -482,7 +487,7 @@ function bwg_gallery_type(gallery_type) {
       jQuery("#tr_gallery").css('display', '');
       jQuery("#tr_tag").css('display', '');
       jQuery("#bwg_pro_version").html('Blog style');
-      jQuery("#bwg_pro_version_link").attr("href", "http://wpdemo.web-dorado.com/blog-style-view/");
+      jQuery("#bwg_pro_version_link").attr("href", "https://demo.10web.io/photo-gallery/blog-style/");
       jQuery(".wd-free-msg").show();
       if ( jQuery(".wd-free-msg").length != 0 ) {
         jQuery("#insert").attr("style", "visibility: hidden;");
@@ -490,52 +495,23 @@ function bwg_gallery_type(gallery_type) {
       }
       break;
     }
-		case 'carousel': {
+	case 'carousel': {
       jQuery('#options_link').attr('href', jQuery('#options_link').attr('data-href') + '&active_tab=1&gallery_type=' + gallery_type);
-	    jQuery("#tr_gallery").css('display', '');
+	  jQuery("#tr_gallery").css('display', '');
       jQuery("#tr_tag").css('display', '');
       jQuery("#bwg_pro_version").html('Carousel');
-      jQuery("#bwg_pro_version_link").attr("href", "http://wpdemo.web-dorado.com/gallery-carousel/");
+      jQuery("#bwg_pro_version_link").attr("href", "https://demo.10web.io/photo-gallery/carousel/");
       jQuery(".wd-free-msg").show();
       if ( jQuery(".wd-free-msg").length != 0 ) {
         jQuery("#insert").attr("style", "visibility: hidden;");
         jQuery(".bwg-pro-views").hide();
       }
       break;
-		}
+	}
   }
-  jQuery("#tbody_popup").css('display', '');
-  jQuery("#tr_popup_width_height").css('display', '');
-  jQuery("#tr_popup_effect").css('display', '');
-  jQuery("#tr_popup_interval").css('display', '');
-  jQuery("#tr_popup_enable_filmstrip").css('display', '');
-  if (jQuery("input[name=popup_enable_filmstrip]:checked").val() == 1) {
-    bwg_enable_disable('', 'tr_popup_filmstrip_height', 'popup_filmstrip_yes');
-  }
-  else {
-    bwg_enable_disable('none', 'tr_popup_filmstrip_height', 'popup_filmstrip_no');
-  }
-  jQuery("#tr_popup_enable_ctrl_btn").css('display', '');
-  if (jQuery("input[name=popup_enable_ctrl_btn]:checked").val() == 1) {
-    bwg_enable_disable('', 'tbody_popup_ctrl_btn', 'popup_ctrl_btn_yes');
-  }
-  else {
-    bwg_enable_disable('none', 'tbody_popup_ctrl_btn', 'popup_ctrl_btn_no');
-  }
-  jQuery("#tr_popup_enable_fullscreen").css('display', '');
-  jQuery("#tr_popup_enable_info").css('display', '');
-  jQuery("#tr_popup_info_full_width").css('display', '');
-  jQuery("#tr_popup_enable_rate").css('display', '');
-  jQuery("#tr_popup_enable_comment").css('display', '');
-  jQuery("#tr_popup_enable_facebook").css('display', '');
-  jQuery("#tr_popup_enable_twitter").css('display', '');
-  jQuery("#tr_popup_enable_google").css('display', '');
-  jQuery("#tr_popup_enable_ecommerce").css('display', '');
-  jQuery("#tr_popup_enable_pinterest").css('display', '');
-  jQuery("#tr_popup_enable_tumblr").css('display', '');
-  jQuery("#tr_popup_info_always_show").css('display', '');
-  bwg_popup_fullscreen();
-  bwg_thumb_click_action();
+
+  bwg_lightbox_hide_show_params();
+
   bwg_shortcode_hide_show_params();
 }
 
@@ -595,13 +571,13 @@ function bwg_get_textarea_selection(id) {
   var textComponent = top.document.getElementById(id);
   var selectedText;
   if (textComponent.selectionStart !== undefined) {
-    // Standards Compliant Version
+    /* Standards Compliant Version */
     var startPos = textComponent.selectionStart;
     var endPos = textComponent.selectionEnd;
     selectedText = textComponent.value.substring(startPos, endPos);
   }
   else if (document.selection !== undefined) {
-    // IE Version
+    /* IE Version */
     textComponent.focus();
     var sel = document.selection.createRange();
     selectedText = sel.text;

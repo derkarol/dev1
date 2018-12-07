@@ -21,7 +21,7 @@ class GalleriesModel_bwg {
     $search = $params['search'];
 
     if ( !$total ) {
-      $query = 'SELECT t1.*, count(DISTINCT t2.filename) as images_count';
+      $query = 'SELECT t1.*, count(t2.id) as images_count';
     }
     else {
       $query = 'SELECT COUNT(*)';
@@ -46,11 +46,16 @@ class GalleriesModel_bwg {
     }
     if ( !$total ) {
       $rows = $wpdb->get_results($query);
+      if ( !empty($rows) ) {
+        foreach ( $rows as $row ) {
+          $row->preview_image = WDWLibrary::image_url_version($row->preview_image, $row->modified_date);
+          $row->random_preview_image = WDWLibrary::image_url_version($row->random_preview_image, $row->modified_date);
+        }
+      }
     }
     else {
       $rows = $wpdb->get_var($query);
     }
-
     return $rows;
   }
 
@@ -127,6 +132,7 @@ class GalleriesModel_bwg {
    */
   public function get_image_rows_data($gallery_id, $params, $total = FALSE) {
     global $wpdb;
+	$rows = array();
     $order = $params['order'];
     $orderby = $params['orderby'];
     $page_per = $params['items_per_page'];
@@ -156,9 +162,26 @@ class GalleriesModel_bwg {
       $query .= " WHERE author>=0";
     }
     $query .= " AND `gallery_id`=" . $gallery_id;
+	  $search_where = '';
     if ( $search ) {
-      $query .= ' AND `filename` LIKE "%' . $search . '%"';
+      $search_keys = explode(' ', trim($search));
+      $alt_search = '(';
+      $filename_search = '(';
+      $description_search = '(';
+      foreach( $search_keys as $search_key) {
+        $alt_search .= '`T_IMAGE`.`alt` LIKE "%' . trim($search_key) . '%" AND ';
+        $filename_search .= '`T_IMAGE`.`filename` LIKE "%' . trim($search_key) . '%" AND ';
+        $description_search .= '`T_IMAGE`.`description` LIKE "%' . trim($search_key) . '%" AND ';
+      }
+      $alt_search = rtrim($alt_search, 'AND ');
+      $alt_search .= ')';
+      $filename_search = rtrim($filename_search, 'AND ');
+      $filename_search .= ')';
+      $description_search = rtrim($description_search, 'AND ');
+      $description_search .= ')';
+      $search_where = ' AND (' . $filename_search . ' OR ' . $alt_search . ' OR ' . $description_search . ') ';
     }
+	$query .= $search_where;
     if ( !$total ) {
       $query .= ' ORDER BY `' . $orderby . '` ' . $order;
       $query .= ' LIMIT ' . $page_num . ',' . $page_per;
@@ -169,17 +192,14 @@ class GalleriesModel_bwg {
         foreach ( $rows as $value ) {
           $value->not_set_items = 0;
           if ( $value->item_longest_dimension && strpos($value->sections, "downloads") !== FALSE ) {
-            $file_path = str_replace("thumb", ".original", htmlspecialchars_decode(ABSPATH . BWG()->upload_dir . $value->thumb_url, ENT_COMPAT | ENT_QUOTES));
+            $file_path = str_replace("thumb", ".original", htmlspecialchars_decode(BWG()->upload_dir . $value->thumb_url, ENT_COMPAT | ENT_QUOTES));
+            WDWLibrary::repair_image_original($file_path);
             list($img_width) = @getimagesize(htmlspecialchars_decode($file_path, ENT_COMPAT | ENT_QUOTES));
             if ( $value->item_longest_dimension > $img_width ) {
               $value->not_set_items = 1;
             }
           }
         }
-      }
-
-      if ( !$rows ) {
-        $rows = array();
       }
       $rows['template'] = new stdClass();
       $rows['template']->id = "tempid";
@@ -205,11 +225,14 @@ class GalleriesModel_bwg {
       $rows['template']->pricelist_id = 0;
       $rows['template']->priselist_name = '';
       $rows['template']->not_set_items = 0;
+      $rows['template']->modified_date = '';
 
-      if ( !$total ) {
-        foreach ( $rows as $value ) {
-          $value->tags = $this->get_tag_rows_data($value->id);
-        }
+      foreach ( $rows as $value ) {
+        $value->tags = $this->get_tag_rows_data($value->id);
+        $value->pure_image_url = $value->image_url;
+        $value->pure_thumb_url = $value->thumb_url;
+        $value->image_url = WDWLibrary::image_url_version($value->image_url, $value->modified_date);
+        $value->thumb_url = WDWLibrary::image_url_version($value->thumb_url, $value->modified_date);
       }
     }
     else {
@@ -262,10 +285,10 @@ class GalleriesModel_bwg {
   public function get_row_data( $id ) {
     if ( $id != 0 ) {
       if ( !current_user_can('manage_options') && BWG()->options->gallery_role ) {
-        $where = " WHERE author=" . get_current_user_id();
+        $where = " WHERE author = " . get_current_user_id();
       }
       else {
-        $where = " WHERE author>=0 ";
+        $where = " WHERE author >= 0 ";
       }
       global $wpdb;
       $row = $wpdb->get_row($wpdb->prepare('SELECT * FROM `' . $wpdb->prefix . 'bwg_gallery`' . $where . ' AND id="%d"', $id));
@@ -296,15 +319,18 @@ class GalleriesModel_bwg {
   /**
    * Save.
    *
-   * @param int $id
+   * @param string $image_action
    *
    * @return array
    */
-  public function save($id = 0) {
+  public function save($image_action = '') {
     $gallery_id = $this->save_db();
-    $saved = $this->save_image_db( $gallery_id );
-
-    return array('id' => $gallery_id, 'saved' => ($gallery_id === FALSE || $saved === FALSE) ? FALSE : TRUE);
+    $data = $this->save_image_db( $gallery_id, $image_action );
+    return array(
+      'id' => $gallery_id,
+      'saved' => (($gallery_id === FALSE || $data['images_saved'] === FALSE) ? FALSE : TRUE),
+      'image_message' => $data['image_message'],
+    );
   }
 
   /**
@@ -321,11 +347,10 @@ class GalleriesModel_bwg {
     $old_slug = WDWLibrary::get('old_slug', '');
     $preview_image = WDWLibrary::get('preview_image', '');
     $random_preview_image = '';
-
     if ( $preview_image == '' ) {
       if ( $id != 0 ) {
         $random_preview_image = $wpdb->get_var($wpdb->prepare("SELECT random_preview_image FROM " . $wpdb->prefix . "bwg_gallery WHERE id='%d'", $id));
-        if ( $random_preview_image == '' || !file_exists(ABSPATH . BWG()->upload_dir . $random_preview_image) ) {
+        if ( $random_preview_image == '' || !file_exists(BWG()->upload_dir . $random_preview_image) ) {
           $random_preview_image = $wpdb->get_var($wpdb->prepare("SELECT thumb_url FROM " . $wpdb->prefix . "bwg_image WHERE gallery_id='%d' ORDER BY `order`", $id));
         }
         if ( empty($random_preview_image) ) {
@@ -394,18 +419,27 @@ class GalleriesModel_bwg {
    * Save Images.
    *
    * @param int $gallery_id
+   * @param string $image_action
    *
-   * @return bool
+   * @return array
    */
-  public function save_image_db( $gallery_id = 0 ) {
+  public function save_image_db( $gallery_id = 0, $image_action = '' ) {
     global $wpdb;
     $image_ids = WDWLibrary::get('ids_string', '');
     $image_id_array = explode(',', $image_ids);
     $save = TRUE;
+    $author = get_current_user_id();
+    $all = WDWLibrary::get('check_all_items', FALSE);
+    $limit = WDWLibrary::get('limit', 0);
+    $image_message = '';
+    $checked_items_count = WDWLibrary::get('checked_items_count', 0);
     foreach ( $image_id_array as $image_id ) {
       if ( $image_id ) {
         $filename = WDWLibrary::get('input_filename_' . $image_id, '');
         $image_url = WDWLibrary::get('image_url_' . $image_id, '');
+        if ( !WDWLibrary::check_external_link($image_url) && !file_exists(html_entity_decode(BWG()->upload_dir . $image_url, ENT_COMPAT | ENT_QUOTES)) ) {
+          continue;
+        }
         $thumb_url = WDWLibrary::get('thumb_url_' . $image_id, '');
         $description = WDWLibrary::get('image_description_' . $image_id, '');
         $alt = WDWLibrary::get('image_alt_text_' . $image_id, '');
@@ -415,7 +449,6 @@ class GalleriesModel_bwg {
         $resolution = WDWLibrary::get('input_resolution_' . $image_id, '');
         $order = (int) WDWLibrary::get('order_input_' . $image_id, 0);
         $redirect_url = WDWLibrary::get('redirect_url_' . $image_id, '');
-        $author = get_current_user_id();
         $tags_ids = WDWLibrary::get('tags_' . $image_id, '');
         $data = array(
           'gallery_id' => $gallery_id,
@@ -429,6 +462,7 @@ class GalleriesModel_bwg {
           'resolution' => $resolution,
           'order' => $order,
         );
+        $temp_image_id = $image_id;
         if ( strpos($image_id, 'pr_') !== FALSE ) {
           if ( !WDWLibrary::check_external_link($image_url) ) {
             $image_url = wp_normalize_path($image_url);
@@ -447,12 +481,11 @@ class GalleriesModel_bwg {
             'rate_count' => 0,
             'hit_count' => 0,
             'pricelist_id' => 0,
+            'modified_date' => time(),
           );
+
           $save = $wpdb->insert($wpdb->prefix . 'bwg_image', $data);
           $new_image_id = $wpdb->insert_id;
-          if ( isset($_POST['check']) && in_array($image_id, $_POST['check']) ) {
-            $_POST['check'][] = $new_image_id;
-          }
           if ( isset($_POST['image_current_id']) && (esc_html($_POST['image_current_id']) == $image_id) ) {
             $_POST['image_current_id'] = $new_image_id;
           }
@@ -461,6 +494,7 @@ class GalleriesModel_bwg {
         else {
           $save = $wpdb->update($wpdb->prefix . 'bwg_image', $data, array( 'id' => $image_id ));
         }
+
         $wpdb->query($wpdb->prepare('DELETE FROM ' . $wpdb->prefix . 'bwg_image_tag WHERE image_id="%d" AND gallery_id="%d"', $image_id, $gallery_id));
         if ( $save !== FALSE ) {
           $tag_id_array = explode(',', $tags_ids);
@@ -469,24 +503,59 @@ class GalleriesModel_bwg {
               if ( strpos($tag_id, 'pr_') !== FALSE ) {
                 $tag_id = substr($tag_id, 3);
               }
-              $wpdb->insert($wpdb->prefix . 'bwg_image_tag', array(
-                'tag_id' => $tag_id,
-                'image_id' => $image_id,
-                'gallery_id' => $gallery_id,
-              ));
-              // Increase tag count in term_taxonomy table.
-              $wpdb->query($wpdb->prepare('UPDATE ' . $wpdb->prefix . 'term_taxonomy SET count="%d" WHERE term_id="%d"', $wpdb->get_var($wpdb->prepare('SELECT COUNT(image_id) FROM ' . $wpdb->prefix . 'bwg_image_tag WHERE tag_id="%d"', $tag_id)), $tag_id));
+
+              if ( strpos($tag_id, 'bwg_') === 0 ) {
+                // If tags added to image from image file meta keywords.
+                $tag_name = str_replace('bwg_', '', $tag_id);
+                $term = term_exists($tag_name, 'bwg_tag');
+                if ( $term === 0 || $term === NULL || is_array($term) ) {
+                  $term = wp_insert_term($tag_name, 'bwg_tag');
+                  // If term exist, get the existing term id.
+                  if ( is_wp_error($term) ) {
+                    if ( isset($term->error_data) ) {
+                      $error_data = $term->error_data;
+                      $term = array();
+                      $term['term_id'] = $error_data['term_exists'];
+                    }
+                  }
+                }
+                $tag_id = isset($term['term_id']) ? $term['term_id'] : 0;
+              }
+
+              if ( $tag_id ) {
+                $wpdb->insert($wpdb->prefix . 'bwg_image_tag', array(
+                  'tag_id' => $tag_id,
+                  'image_id' => $image_id,
+                  'gallery_id' => $gallery_id,
+                ));
+                // Increase tag count in term_taxonomy table.
+                $wpdb->query($wpdb->prepare('UPDATE ' . $wpdb->prefix . 'term_taxonomy SET count="%d" WHERE term_id="%d"', $wpdb->get_var($wpdb->prepare('SELECT COUNT(image_id) FROM ' . $wpdb->prefix . 'bwg_image_tag WHERE tag_id="%d"', $tag_id)), $tag_id));
+              }
             }
           }
         }
+        if ( !$all
+          && $image_action
+          && method_exists($this, $image_action)
+          && isset($_POST['check_' . $temp_image_id]) ) {
+          $image_message = $this->$image_action($image_id, $gallery_id);
+        }
       }
     }
-    if ( $save !== FALSE ) {
-      return TRUE;
+
+    if ( !in_array($image_message, WDWLibrary::error_message_ids()) && $image_action && $checked_items_count ) {
+      $actions = WDWLibrary::image_actions();
+      $image_message = sprintf(_n('%s item successfully %s.', '%s items successfully %s.', $checked_items_count, BWG()->prefix), $checked_items_count, $actions[$image_action]['bulk_action']);
     }
-    else {
-      return FALSE;
+
+    if ( $all
+      && $image_action
+      && method_exists($this, $image_action) ) {
+      $image_message = $this->$image_action(0, $gallery_id, TRUE);
     }
+
+    $images_saved = ($save !== FALSE) ? TRUE : FALSE;
+    return array( 'images_saved' => $images_saved, 'image_message' => $image_message );
   }
 
   /**
@@ -499,7 +568,6 @@ class GalleriesModel_bwg {
   public function get_post_random_image( $params = array() ) {
     $i = 0;
     $random_preview_image = '';
-
     while ( isset($params['input_filetype_pr_' . $i]) ) {
       if ( isset($params['thumb_url_pr_' . $i]) ) {
         $random_preview_image = esc_html(stripslashes($params['thumb_url_pr_' . $i]));
@@ -559,15 +627,22 @@ class GalleriesModel_bwg {
    * Delete image.
    *
    * @param      $id
+   * @param      $gallery_id
    * @param bool $all
    *
    * @return int
    */
-  public function image_delete( $id, $all = FALSE ) {
+  public function image_delete( $id, $gallery_id = 0, $all = FALSE ) {
     global $wpdb;
-    $current_id = WDWLibrary::get('current_id', 0);
-    $where = 'WHERE gallery_id=' . $current_id;
+    if ( $gallery_id == 0 ) {
+      $gallery_id = (int) WDWLibrary::get('current_id', 0);
+    }
+    $where = 'WHERE gallery_id=' . $gallery_id;
     $where .= ($all ? '' : ' AND id=' . $id);
+    $search = WDWLibrary::get('s', '');
+    if ( $search ) {
+      $where .= ' AND `filename` LIKE "%' . $search . '%"';
+    }
     $image_where = ($all ? '' : ' WHERE image_id=' . $id);
 
     $delete = $wpdb->query('DELETE FROM `' . $wpdb->prefix . 'bwg_image`' . $where);
@@ -609,15 +684,22 @@ class GalleriesModel_bwg {
    * Publish image.
    *
    * @param      $id
+   * @param      $gallery_id
    * @param bool $all
    *
    * @return int
    */
-  public function image_publish( $id, $all = FALSE ) {
+  public function image_publish( $id, $gallery_id = 0, $all = FALSE ) {
     global $wpdb;
-    $current_id = WDWLibrary::get('current_id', 0);
-    $where = ' WHERE gallery_id=' . $current_id;
+    if ( $gallery_id == 0 ) {
+      $gallery_id = (int) WDWLibrary::get('current_id', 0);
+    }
+    $where = ' WHERE gallery_id=' . $gallery_id;
     $where .= ($all ? '' : ' AND id=' . $id);
+    $search = WDWLibrary::get('s', '');
+    if ( $search ) {
+      $where .= ' AND `filename` LIKE "%' . $search . '%"';
+    }
     $updated = $wpdb->query('UPDATE `' . $wpdb->prefix . 'bwg_image` SET published=1' . $where);
 
 	  $message = 2;
@@ -631,15 +713,22 @@ class GalleriesModel_bwg {
    * Unpublish image.
    *
    * @param      $id
+   * @param      $gallery_id
    * @param bool $all
    *
    * @return int
    */
-  public function image_unpublish( $id, $all = FALSE ) {
+  public function image_unpublish( $id, $gallery_id = 0, $all = FALSE ) {
     global $wpdb;
-    $current_id = WDWLibrary::get('current_id', 0);
-    $where = ' WHERE gallery_id=' . $current_id;
+    if ( $gallery_id == 0 ) {
+      $gallery_id = (int) WDWLibrary::get('current_id', 0);
+    }
+    $where = ' WHERE gallery_id=' . $gallery_id;
     $where .= ($all ? '' : ' AND id=' . $id);
+    $search = WDWLibrary::get('s', '');
+    if ( $search ) {
+      $where .= ' AND `filename` LIKE "%' . $search . '%"';
+    }
     $updated = $wpdb->query('UPDATE `' . $wpdb->prefix . 'bwg_image` SET published=0' . $where);
 
 	  $message = 2;
@@ -653,14 +742,18 @@ class GalleriesModel_bwg {
    * Reset image.
    *
    * @param      $id
+   * @param      $gallery_id
    * @param bool $all
    *
    * @return int
    */
-  public function image_reset( $id, $all = FALSE ) {
+  public function image_reset( $id, $gallery_id = 0, $all = FALSE ) {
     if ( $all ) {
-      $gallery_id = (int) WDWLibrary::get('current_id', 0);
-      WDWLibrary::bwg_image_recover_all($gallery_id);
+      if ( $gallery_id == 0 ) {
+        $gallery_id = (int) WDWLibrary::get('current_id', 0);
+      }
+      $limit = WDWLibrary::get('limit', 0);
+      WDWLibrary::bwg_image_recover_all($gallery_id, $limit);
     }
     else {
       global $wpdb;
@@ -668,9 +761,10 @@ class GalleriesModel_bwg {
       $width = BWG()->options->upload_img_width;
       $image = $wpdb->get_row($wpdb->prepare('SELECT * FROM ' . $wpdb->prefix . 'bwg_image WHERE id="%d"', $id));
       WDWLibrary::recover_image($image, $thumb_width, $width, 'gallery_page');
-	  $where = ($id) ? ' `id` = ' . $id : 1;
-	  WDWLibrary::update_image_modified_date( $where );
+      $where = ($id) ? ' `id` = ' . $id : 1;
+      WDWLibrary::update_image_modified_date( $where );
     }
+
     return 20;
   }
 
@@ -678,13 +772,24 @@ class GalleriesModel_bwg {
    * Set watermark.
    *
    * @param      $id
+   * @param      $gallery_id
    * @param bool $all
    *
    * @return int
    */
-  public function image_set_watermark($id, $all = FALSE) {
-    $gallery_id = (int) WDWLibrary::get('current_id', 0);
-    $message_id = WDWLibrary::bwg_image_set_watermark($gallery_id, ($all ? 0 : $id));
+  public function image_set_watermark($id, $gallery_id = 0, $all = FALSE) {
+    $options = new WD_BWG_Options();
+    list($width_watermark, $height_watermark, $type_watermark) = @getimagesize( str_replace(' ', '%20', $options->built_in_watermark_url) );
+    if ( $options->built_in_watermark_type == 'image' && (empty($width_watermark) OR empty($height_watermark) OR empty($type_watermark))) {
+      $message_id = 26;
+    }
+    else {
+      if ( $gallery_id == 0 ) {
+        $gallery_id = (int) WDWLibrary::get('current_id', 0);
+      }
+      $limit = WDWLibrary::get('limit', 0);
+      $message_id = WDWLibrary::bwg_image_set_watermark($gallery_id, ($all ? 0 : $id), $limit);
+    }
 
     return $message_id;
   }
@@ -693,24 +798,26 @@ class GalleriesModel_bwg {
    * Rotate left.
    *
    * @param      $id
+   * @param      $gallery_id
    * @param bool $all
    *
    * @return int
    */
-  public function image_rotate_left($id, $all = FALSE) {
-    return $this->rotate(90, $id, $all);
+  public function image_rotate_left($id, $gallery_id = 0, $all = FALSE) {
+    return $this->rotate(90, $id, $gallery_id, $all);
   }
 
   /**
    * Rotate right.
    *
    * @param      $id
+   * @param      $gallery_id
    * @param bool $all
    *
    * @return int
    */
-  public function image_rotate_right($id, $all = FALSE) {
-    return $this->rotate(270, $id, $all);
+  public function image_rotate_right($id, $gallery_id = 0, $all = FALSE) {
+    return $this->rotate(270, $id, $gallery_id, $all);
   }
 
   /**
@@ -718,21 +825,28 @@ class GalleriesModel_bwg {
    *
    * @param      $edit_type
    * @param int  $id
+   * @param      $gallery_id
    * @param bool $all
    *
    * @return int
    */
-  public function rotate( $edit_type, $id = 0, $all = FALSE ) {
+  public function rotate( $edit_type, $id = 0, $gallery_id = 0, $all = FALSE ) {
     global $wpdb;
     $image_id = ($all ? 0 : $id);
-    $gallery_id = (int) WDWLibrary::get('current_id', 0);
+    if ( $gallery_id == 0 ) {
+      $gallery_id = (int) WDWLibrary::get('current_id', 0);
+    }
 	  $where = ( ($gallery_id) ? ' `gallery_id` = ' . $gallery_id . ($image_id ? ' AND `id` = ' . $image_id : '' ) : 1 );
+    $search = WDWLibrary::get('s', '');
+    if ( $search ) {
+      $where .= ' AND `filename` LIKE "%' . $search . '%"';
+    }
     $images_data = $wpdb->get_results( 'SELECT id, image_url, thumb_url FROM `' . $wpdb->prefix . 'bwg_image` WHERE ' . $where );
     @ini_set('memory_limit', '-1');
     foreach ( $images_data as $image_data ) {
       $image_data->image_url = stripcslashes($image_data->image_url);
-      $filename = htmlspecialchars_decode(ABSPATH . BWG()->upload_dir . $image_data->image_url, ENT_COMPAT | ENT_QUOTES);
-      $thumb_filename = htmlspecialchars_decode(ABSPATH . BWG()->upload_dir . $image_data->thumb_url, ENT_COMPAT | ENT_QUOTES);
+      $filename = htmlspecialchars_decode(BWG()->upload_dir . $image_data->image_url, ENT_COMPAT | ENT_QUOTES);
+      $thumb_filename = htmlspecialchars_decode(BWG()->upload_dir . $image_data->thumb_url, ENT_COMPAT | ENT_QUOTES);
       list($width_rotate, $height_rotate, $type_rotate) = getimagesize($filename);
       if ( $edit_type == '270' || $edit_type == '90' ) {
         if ( $type_rotate == 2 ) {
@@ -791,73 +905,36 @@ class GalleriesModel_bwg {
     }
     WDWLibrary::update_image_modified_date( $where );
 
-	  return 22;
+	return 22;
   }
 
   /**
    * Recreate thumbnail.
    *
    * @param      $id
+   * @param      $gallery_id
    * @param bool $all
    *
    * @return int
    */
-  public function image_recreate_thumbnail($id, $all = FALSE) {
+  public function image_recreate_thumbnail($id, $gallery_id = 0, $all = FALSE) {
     $image_id = ($all ? 0 : $id);
     global $wpdb;
-    $gallery_id = (int) WDWLibrary::get('current_id', 0);
+    if ( $gallery_id == 0 ) {
+      $gallery_id = (int) WDWLibrary::get('current_id', 0);
+    }
 	  $where = ( ($gallery_id) ? ' `gallery_id` = ' . $gallery_id . ( $image_id ? ' AND `id` = ' . $image_id : '' ) : 1 );
     $img_ids = $wpdb->get_results( 'SELECT id, thumb_url FROM `' . $wpdb->prefix . 'bwg_image` WHERE ' . $where );
+    $search = WDWLibrary::get('s', '');
+    if ( $search ) {
+      $where .= ' AND `filename` LIKE "%' . $search . '%"';
+    }
     foreach ( $img_ids as $img_id ) {
-      $file_path = str_replace("thumb", ".original", htmlspecialchars_decode(ABSPATH . BWG()->upload_dir . $img_id->thumb_url, ENT_COMPAT | ENT_QUOTES));
-      $new_file_path = htmlspecialchars_decode(ABSPATH . BWG()->upload_dir . $img_id->thumb_url, ENT_COMPAT | ENT_QUOTES);
-      list($img_width, $img_height, $type) = @getimagesize(htmlspecialchars_decode($file_path, ENT_COMPAT | ENT_QUOTES));
-      if ( !$img_width || !$img_height ) {
-        continue;
+      $file_path = str_replace("thumb", ".original", htmlspecialchars_decode(BWG()->upload_dir . $img_id->thumb_url, ENT_COMPAT | ENT_QUOTES));
+      $new_file_path = htmlspecialchars_decode(BWG()->upload_dir . $img_id->thumb_url, ENT_COMPAT | ENT_QUOTES);
+      if ( WDWLibrary::repair_image_original($file_path) ) {
+        WDWLibrary::resize_image( $file_path, $new_file_path, BWG()->options->upload_thumb_width, BWG()->options->upload_thumb_height );
       }
-      $max_width = BWG()->options->upload_thumb_width;
-      $max_height = BWG()->options->upload_thumb_height;
-      $scale = min($max_width / $img_width, $max_height / $img_height);
-      @ini_set('memory_limit', '-1');
-      if ( !function_exists('imagecreatetruecolor') ) {
-        error_log('Function not found: imagecreatetruecolor');
-
-        return FALSE;
-      }
-      $new_width = $img_width * $scale;
-      $new_height = $img_height * $scale;
-      $dst_x = 0;
-      $dst_y = 0;
-      $new_img = @imagecreatetruecolor($new_width, $new_height);
-      switch ( $type ) {
-        case 2:
-          $src_img = @imagecreatefromjpeg($file_path);
-          $write_image = 'imagejpeg';
-          $image_quality = BWG()->options->jpeg_quality;
-          break;
-        case 1:
-          @imagecolortransparent($new_img, @imagecolorallocate($new_img, 0, 0, 0));
-          $src_img = @imagecreatefromgif($file_path);
-          $write_image = 'imagegif';
-          $image_quality = NULL;
-          break;
-        case 3:
-          @imagecolortransparent($new_img, @imagecolorallocate($new_img, 0, 0, 0));
-          @imagealphablending($new_img, FALSE);
-          @imagesavealpha($new_img, TRUE);
-          $src_img = @imagecreatefrompng($file_path);
-          $write_image = 'imagepng';
-          $image_quality = BWG()->options->png_quality;
-          break;
-        default:
-          $src_img = NULL;
-          break;
-      }
-      $src_img && @imagecopyresampled($new_img, $src_img, $dst_x, $dst_y, 0, 0, $new_width, $new_height, $img_width, $img_height) && $write_image($new_img, $new_file_path, $image_quality);
-      // Free up memory (imagedestroy does not delete files):
-      @imagedestroy($src_img);
-      @imagedestroy($new_img);
-      @ini_restore('memory_limit');
     }
 	  WDWLibrary::update_image_modified_date( $where );
 
@@ -868,21 +945,34 @@ class GalleriesModel_bwg {
    * Resize image.
    *
    * @param      $id
+   * @param      $gallery_id
    * @param bool $all
    *
    * @return int
    */
-  public function image_resize($id, $all = FALSE) {
+  public function image_resize($id, $gallery_id = 0, $all = FALSE) {
     $image_id = ($all ? 0 : $id);
     global $wpdb;
-    $gallery_id = (int) WDWLibrary::get('current_id', 0);
+    if ( $gallery_id == 0 ) {
+      $gallery_id = (int) WDWLibrary::get('current_id', 0);
+    }
     $image_width = (int) WDWLibrary::get('image_width', 1600);
     $image_height = (int) WDWLibrary::get('image_height', 1200);
-    $where = ( ($gallery_id) ? ' gallery_id=' . $gallery_id . ( $image_id ? ' AND id=' . $image_id : '' ) : '' );
-    $images = $wpdb->get_results('SELECT * FROM `' . $wpdb->prefix . 'bwg_image` ' . $where );
+	  $where = ' gallery_id=' . $gallery_id;
+    $where .= ($all ? '' : ' AND id=' . $id);
+    $search = WDWLibrary::get('s', '');
+    if ( $search ) {
+      $where .= ' AND `filename` LIKE "%' . $search . '%"';
+    }
+    $images = $wpdb->get_results('SELECT * FROM `' . $wpdb->prefix . 'bwg_image` WHERE ' . $where );
     if ( !empty($images) ) {
       foreach ( $images as $image ) {
-        $this->scaled_image(ABSPATH . BWG()->upload_dir . $image->image_url, $image_width, $image_height);
+        $file_path = BWG()->upload_dir . $image->image_url;
+        $thumb_filename = BWG()->upload_dir . $image->thumb_url;
+        $original_filename = str_replace('/thumb/', '/.original/', $thumb_filename);
+        if ( WDWLibrary::repair_image_original($original_filename) ) {
+          WDWLibrary::resize_image( $original_filename, $file_path, $image_width, $image_height );
+        }
       }
     }
     WDWLibrary::update_image_modified_date( $where );
@@ -891,102 +981,24 @@ class GalleriesModel_bwg {
   }
 
   /**
-   * Create scaled image.
-   *
-   * @param      $file_path
-   * @param int  $max_width
-   * @param int  $max_height
-   * @param bool $crop
-   *
-   * @return bool
-   */
-  public function scaled_image( $file_path, $max_width = 0, $max_height = 0, $crop = FALSE ) {
-    $file_path = htmlspecialchars_decode($file_path, ENT_COMPAT | ENT_QUOTES);
-    if ( !function_exists('getimagesize') ) {
-      error_log('Function not found: getimagesize');
-
-      return FALSE;
-    }
-    list($img_width, $img_height, $type) = @getimagesize($file_path);
-    if ( !$img_width || !$img_height ) {
-      return FALSE;
-    }
-    $scale = min($max_width / $img_width, $max_height / $img_height);
-    @ini_set('memory_limit', '-1');
-    if ( ($scale >= 1) || (($max_width === 0) && ($max_height === 0)) ) {
-      // if ($file_path !== $new_file_path) {
-      // return copy($file_path, $new_file_path);
-      // }
-      return TRUE;
-    }
-    if ( !function_exists('imagecreatetruecolor') ) {
-      error_log('Function not found: imagecreatetruecolor');
-
-      return FALSE;
-    }
-    if ( !$crop ) {
-      $new_width = $img_width * $scale;
-      $new_height = $img_height * $scale;
-      $dst_x = 0;
-      $dst_y = 0;
-      $new_img = @imagecreatetruecolor($new_width, $new_height);
-    }
-    else {
-      if ( ($img_width / $img_height) >= ($max_width / $max_height) ) {
-        $new_width = $img_width / ($img_height / $max_height);
-        $new_height = $max_height;
-      }
-      else {
-        $new_width = $max_width;
-        $new_height = $img_height / ($img_width / $max_width);
-      }
-      $dst_x = 0 - ($new_width - $max_width) / 2;
-      $dst_y = 0 - ($new_height - $max_height) / 2;
-      $new_img = @imagecreatetruecolor($max_width, $max_height);
-    }
-    switch ( $type ) {
-      case 2:
-        $src_img = @imagecreatefromjpeg($file_path);
-        $write_image = 'imagejpeg';
-        $image_quality = BWG()->options->jpeg_quality;
-        break;
-      case 1:
-        @imagecolortransparent($new_img, @imagecolorallocate($new_img, 0, 0, 0));
-        $src_img = @imagecreatefromgif($file_path);
-        $write_image = 'imagegif';
-        $image_quality = NULL;
-        break;
-      case 3:
-        @imagecolortransparent($new_img, @imagecolorallocate($new_img, 0, 0, 0));
-        @imagealphablending($new_img, FALSE);
-        @imagesavealpha($new_img, TRUE);
-        $src_img = @imagecreatefrompng($file_path);
-        $write_image = 'imagepng';
-        $image_quality = BWG()->options->png_quality;
-        break;
-      default:
-        $src_img = NULL;
-    }
-    $success = $src_img && @imagecopyresampled($new_img, $src_img, $dst_x, $dst_y, 0, 0, $new_width, $new_height, $img_width, $img_height) && $write_image($new_img, $file_path, $image_quality);
-    // Free up memory (imagedestroy does not delete files):
-    @imagedestroy($src_img);
-    @imagedestroy($new_img);
-    @ini_restore('memory_limit');
-
-    return $success;
-  }
-
-  /**
    * Edit image alt/description/redirect URL.
    *
    * @param      $id
+   * @param      $gallery_id
    * @param bool $all
    *
    * @return int
    */
-  public function image_edit($id, $all = FALSE) {
-    $gallery_id = (int) WDWLibrary::get('current_id', 0);
-    $where = ($all ? array('gallery_id' => $gallery_id ) : array('id' => $id));
+  public function image_edit($id, $gallery_id = 0, $all = FALSE) {
+    if ( $gallery_id == 0 ) {
+      $gallery_id = (int) WDWLibrary::get('current_id', 0);
+    }
+    $where = ' WHERE gallery_id=' . $gallery_id;
+    $where .= ($all ? '' : ' AND id=' . $id);
+    $search = WDWLibrary::get('s', '');
+    if ( $search ) {
+      $where .= ' AND `filename` LIKE "%' . $search . '%"';
+    }
     $title = WDWLibrary::get('title', '');
     $desc = WDWLibrary::get('desc', '');
     $redirecturl = WDWLibrary::get('redirecturl', '');
@@ -996,17 +1008,28 @@ class GalleriesModel_bwg {
       'description' => $desc,
       'redirect_url' => $redirecturl
     ), $where);
-
-    return 25;
+    $updated = $wpdb->query('UPDATE `' . $wpdb->prefix . 'bwg_image` SET `alt`="' . $title . '", `description`="' . $desc . '", `redirect_url`="' . $redirecturl . '"' . $where);
+    $message = 2;
+    if ( $updated !== FALSE ) {
+      $message = 25;
+    }
+    return $message;
   }
 
-  public function image_add_tag($id, $all = FALSE) {
-    $image_id = ($all ? 0 : $id);
-    $gallery_id = (int) WDWLibrary::get('current_id', 0);
+  public function image_add_tag($id, $gallery_id = 0, $all = FALSE) {
+    if ( $gallery_id == 0 ) {
+      $gallery_id = (int) WDWLibrary::get('current_id', 0);
+    }
     $tag_ids = WDWLibrary::get('added_tags_id', '');
     $tag_ids_array = explode(',', $tag_ids);
     global $wpdb;
-    $images = $wpdb->get_results('SELECT * FROM `' . $wpdb->prefix . 'bwg_image` WHERE gallery_id=' . $gallery_id . ($image_id ? ' AND id=' . $image_id : ''));
+    $where = ' WHERE gallery_id=' . $gallery_id;
+    $where .= ($all ? '' : ' AND id=' . $id);
+    $search = WDWLibrary::get('s', '');
+    if ( $search ) {
+      $where .= ' AND `filename` LIKE "%' . $search . '%"';
+    }
+    $images = $wpdb->get_results('SELECT * FROM `' . $wpdb->prefix . 'bwg_image`' . $where);
     foreach ( $images as $image ) {
       foreach ( $tag_ids_array as $tag_id ) {
         if ( $tag_id ) {
@@ -1027,17 +1050,26 @@ class GalleriesModel_bwg {
     return 25;
   }
 
-  public function set_image_pricelist($id, $all = FALSE) {
+  public function set_image_pricelist($id, $gallery_id = 0, $all = FALSE) {
     global $wpdb;
     $pricelist_id = (int) WDWLibrary::get('image_pricelist_id', 0);
     $item_longest_dimension = $wpdb->get_var('SELECT MAX(item_longest_dimension) AS item_longest_dimension  FROM ' . $wpdb->prefix . 'wdpg_ecommerce_pricelist_items AS T_PRICELIST_ITEMS LEFT JOIN ' . $wpdb->prefix . 'wdpg_ecommerce_pricelists AS T_PRICELISTS ON T_PRICELIST_ITEMS.pricelist_id = T_PRICELISTS.id  WHERE T_PRICELIST_ITEMS.pricelist_id="' . $pricelist_id . '" AND T_PRICELISTS.sections LIKE "%downloads%"');
     $not_set_items = array();
     if ($pricelist_id) {
       $image_id = ($all ? 0 : $id);
-      $gallery_id = (int) WDWLibrary::get('current_id', 0);
-      $image_ids_col = $wpdb->get_col($wpdb->prepare('SELECT id FROM ' . $wpdb->prefix . 'bwg_image WHERE gallery_id="%d"' . ($image_id ? ' AND id=%d' : ''), ($image_id ? array($gallery_id, $image_id) : array($gallery_id))));
+      if ( $gallery_id == 0 ) {
+        $gallery_id = (int) WDWLibrary::get('current_id', 0);
+      }
+      $where = ' WHERE gallery_id=' . $gallery_id;
+      $where .= ($all ? '' : ' AND id=' . $id);
+      $search = WDWLibrary::get('s', '');
+      if ( $search ) {
+        $where .= ' AND `filename` LIKE "%' . $search . '%"';
+      }
+      $image_ids_col = $wpdb->get_col('SELECT id FROM `' . $wpdb->prefix . 'bwg_image`' . $where);
       foreach ($image_ids_col as $image_id) {
-        $file_path = str_replace("thumb", ".original", htmlspecialchars_decode(ABSPATH . BWG()->upload_dir . $_POST['thumb_url_' . $image_id], ENT_COMPAT | ENT_QUOTES));
+        $file_path = str_replace("thumb", ".original", htmlspecialchars_decode(BWG()->upload_dir . $_POST['thumb_url_' . $image_id], ENT_COMPAT | ENT_QUOTES));
+        WDWLibrary::repair_image_original($file_path);
         list($img_width) = @getimagesize(htmlspecialchars_decode($file_path, ENT_COMPAT | ENT_QUOTES));
         if ($item_longest_dimension > $img_width && $img_width) {
           $not_set_items[] = $image_id . "-" . $item_longest_dimension;
@@ -1059,13 +1091,40 @@ class GalleriesModel_bwg {
     }
   }
 
-  public function remove_pricelist_all($id, $all = FALSE) {
+  public function remove_pricelist_all($id, $gallery_id = 0, $all = FALSE) {
     global $wpdb;
-    $gallery_id = (int) WDWLibrary::get('current_id', 0);
-    $image_id = ($all ? 0 : $id);
-    $image_ids_col = $wpdb->get_col($wpdb->prepare('SELECT id FROM ' . $wpdb->prefix . 'bwg_image WHERE gallery_id="%d"' . ($image_id ? ' AND id=%d' : ''), ($image_id ? array($gallery_id, $image_id) : array($gallery_id))));
-    foreach ( $image_ids_col as $image_id ) {
-      $wpdb->update($wpdb->prefix . 'bwg_image', array('pricelist_id' => 0), array('id' => $image_id));
+    if ( $gallery_id == 0 ) {
+      $gallery_id = (int) WDWLibrary::get('current_id', 0);
     }
+    $where = ' WHERE gallery_id=' . $gallery_id;
+    $where .= ($all ? '' : ' AND id=' . $id);
+    $search = WDWLibrary::get('s', '');
+    if ( $search ) {
+      $where .= ' AND `filename` LIKE "%' . $search . '%"';
+    }
+    $wpdb->query('UPDATE `' . $wpdb->prefix . 'bwg_image` SET pricelist_id=0' . $where);
+  }
+
+  /**
+   * Ordering.
+   *
+   * @param array $orders
+   *
+   * @return int
+   */
+  public function ordering( $orders = array() ) {
+    global $wpdb;
+    $message_id = 2;
+    if ( !empty($orders) ) {
+      foreach ( $orders as $order => $id ) {
+        $upd_query = 'UPDATE ' . $wpdb->prefix . 'bwg_gallery SET `order` = ' . $order . ' WHERE `id` = ' . $id;
+        $update = $wpdb->query($upd_query);
+        if ( $update ) {
+          $message_id = 1;
+        }
+      }
+    }
+
+    return $message_id;
   }
 }

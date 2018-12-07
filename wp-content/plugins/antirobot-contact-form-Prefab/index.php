@@ -208,7 +208,7 @@ function arcf_frontend() {
 			
 			<div class="bx--form-item bx--checkbox-wrapper">
 				<input id="bx--checkbox-new" class="bx--checkbox" type="checkbox" value="new" name="checkbox" checked required>
-				<label for="bx--checkbox-new" class="bx--checkbox-label"><?php _e( '*By submitting to this form you agree to collect and process, your data for contact purpose.', 'antirobot-contact-form' ) ?></label>
+				<label for="bx--checkbox-new" class="bx--checkbox-label"><?php _e( '*By submitting to this form you agree to collect and process, your data for contact and marketing purpose. You will be subscribed to our mailing list.', 'antirobot-contact-form' ) ?></label>
 			  </div>			
 
 		  <div class="bx--form-requirement">
@@ -340,10 +340,22 @@ function arcf_validation() {
 		$sender_subject = sanitize_text_field( get_option( 'arcf_subject' ) );
 
 		$sender_message = sprintf(
-
+			
+		
+			
 		/* translators: 1: Sender Name 2: Sender E-Mail */
 
-			__( 'You received a new message from %1$s from company: %2$s placed in: %3$s under adress: street %4$s City: %5$s, E-mail: %6$s, telephone: %7$s', 'antirobot-contact-form' ),
+			__( '
+You received a new message 
+From: %1$s, 
+Company: %2$s, 
+Placed in: %3$s, 
+Adress: 
+Street %4$s, 
+City: %5$s, 
+E-mail: %6$s, 
+Telephone: %7$s,
+The message text:', 'antirobot-contact-form' ),
 
 			$sender_name,
 			
@@ -359,7 +371,7 @@ function arcf_validation() {
 			
 			$sender_telephone
 
-		);
+		);/* <0.0> This formating is how it display in mail, plain text, || And the number of variable is from the order it has as an argument in $sender_message sprintf(__('...',1,2,3,4,5,6)) */
 
 		$sender_message .= "\r\n\r\n";
 

@@ -34,12 +34,11 @@ add_action( 'wp_enqueue_scripts', 'wpb_adding_scripts' );
 function twentyseventeen_childtheme_front_page_sections() {
     return 6;
 }
-add_filter('acf/settings/show_admin', 'my_acf_show_admin');
 
-function my_acf_show_admin( $show ) {
-    
-    return current_user_can('manage_options');
-    
+//So not to mess with acf <0.0>
+add_filter('acf/settings/show_admin', 'my_acf_show_admin');
+function my_acf_show_admin( $show ) {    
+    return current_user_can('manage_options');    
 }
 
 add_filter( 'twentyseventeen_front_page_sections', 'twentyseventeen_childtheme_front_page_sections' );
@@ -204,15 +203,18 @@ function theme_review_child_domain() {
 remove_all_actions( 'do_feed_rss2' );
 add_action( 'do_feed_rss2', 'my_custom_rss', 10, 1 );
 */
-add_action( 'after_setup_theme', 'my_rss_template' );
+
+add_action( 'after_setup_theme', 'my_rss_template' ); //O.O I disabled it for the moment so I could return to defaults
+
 /**
  * Register custom RSS template.
  */
+
 function my_rss_template() {
 	add_feed( 'MostRecent', 'my_custom_rss_render' );
 	add_feed( 'SecendPosts', 'my_custom_rss_render2' );
 	add_feed( 'ThirdPosts', 'my_custom_rss_render3' );
-}
+} //O.O I disabled it for the moment so I could return to defaults
 
 /**
  * Custom RSS template callback.
@@ -227,8 +229,10 @@ function my_custom_rss_render3() {
 	get_template_part( 'feed', 'ThirdPosts' );
 }
 
+
+
 /**
- * Register custom pv-product Post Type. <o.o>
+ * Register custom pv-product Post Type.<o.o>
  */
 
 

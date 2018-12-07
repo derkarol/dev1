@@ -1,10 +1,11 @@
-=== Cookie Notice by dFactory===
+=== Cookie Notice for GDPR ===
 Contributors: dfactory
 Donate link: http://www.dfactory.eu/
-Tags: cookie, cookies, notice, notification, notify, cookie, cookie compliance, cookie law, eu cookie, privacy, privacy directive, consent, Bootstrap
+Tags: gdpr, cookie, cookies, notice, notification, notify, cookie, cookie compliance, cookie law, eu cookie, privacy, privacy directive, consent
 Requires at least: 3.3
-Tested up to: 4.9.6
-Stable tag: 1.2.43
+Requires PHP: 5.2.4
+Tested up to: 4.9.8
+Stable tag: 1.2.45
 License: MIT License
 License URI: http://opensource.org/licenses/MIT
 
@@ -18,8 +19,7 @@ For more information, check out plugin page at [dFactory](http://www.dfactory.eu
 
 = Features include: =
 
-* 100% GDPR compliant
-* Customizable the cookie message
+* Customizable cookie message
 * Redirects users to specified page for more cookie information
 * Multiple cookie expiry options
 * Link to Privacy Policy page
@@ -65,6 +65,15 @@ No questions yet.
 1. screenshot-1.png
 
 == Changelog ==
+
+= 1.2.45 =
+* Tweak: Improved WP Super Cache support
+* Tweak: CSS container style issue and media query for mobile
+
+= 1.2.44 =
+* Fix: The text of the revoke button ignored in shortcode
+* Fix: Revoke consent button not displayed automatically in top position
+* Tweak: Add shortcode parsing for content of [cookies_accepted], thanks to [dsturm](https://github.com/dsturm)
 
 = 1.2.43 =
 * New: Option to revoke the user consent
@@ -249,7 +258,6 @@ Initial release
 
 == Upgrade Notice ==
 
-= 1.2.43 =
-* New: Option to revoke the user consent
-* New: Script blocking extended to header and footer
-* New: Synchronization with WordPress 4.9.6 Privacy Policy page
+= 1.2.45 =
+* Tweak: Improved WP Super Cache support
+* Tweak: CSS container style issue and media query for mobile

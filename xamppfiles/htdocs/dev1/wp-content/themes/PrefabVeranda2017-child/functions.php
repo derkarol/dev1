@@ -32,7 +32,7 @@ add_action( 'wp_enqueue_scripts', 'wpb_adding_scripts' );
 //for S front page <0.0>
 
 function twentyseventeen_childtheme_front_page_sections() {
-    return 6;
+    return 5;
 }
 add_filter('acf/settings/show_admin', 'my_acf_show_admin');
 

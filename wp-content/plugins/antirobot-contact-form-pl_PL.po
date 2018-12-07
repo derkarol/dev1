@@ -2,194 +2,261 @@
 # This file is distributed under the same license as the Plugins - AntiRobot Contact Form - Development (trunk) package.
 msgid ""
 msgstr ""
-"PO-Revision-Date: 2018-05-25 12:52+0200\n"
+"Project-Id-Version: Plugins - AntiRobot Contact Form - Development (trunk)\n"
+"POT-Creation-Date: 2018-12-07 13:49+0100\n"
+"PO-Revision-Date: 2018-12-07 14:12+0100\n"
+"Last-Translator: \n"
+"Language-Team: \n"
+"Language: pl_PL\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=2; plural=n > 1;\n"
-"X-Generator: Poedit 2.0.7\n"
-"Language: pl_PL\n"
-"Project-Id-Version: Plugins - AntiRobot Contact Form - Development (trunk)\n"
-"POT-Creation-Date: \n"
-"Last-Translator: \n"
-"Language-Team: \n"
+"X-Generator: Poedit 2.2\n"
 
-#: index.php:314
-msgid "Enable or Disable Invisible reCAPTCHA. This also needs to be set at the reCAPTCHA site settings."
-msgstr "Włącz lub wyłącz Niewidoczny reCAPTCHA. Należy to również ustawić w ustawieniach witryny reCAPTCHA."
-
-#: index.php:311
-msgid "Enable Invisible reCAPTCHA"
-msgstr "Włącz niewidoczny reCAPTCHA"
-
-#: index.php:301 index.php:306
-msgid "Invisible reCAPTCHA"
-msgstr "Niewidoczny reCAPTCHA"
-
-#: index.php:335
-msgid "This controls the display of the placeholder attributes."
-msgstr "Kontroluje wyświetlanie atrybutów zastępczych."
-
-#: index.php:332
-msgid "Show Placeholders"
-msgstr "Pokaż teksty wskazań"
-
-#: index.php:322 index.php:327
-msgid "Placeholder Visibility"
-msgstr "Widoczność tekstów wskazań"
-
-#. Author URI of the plugin/theme
-msgid "https://pascalebeier.de/"
-msgstr "https://pascalebeier.de/"
-
-#. Author of the plugin/theme
-msgid "Pascale Beier"
-msgstr "Pascale Beier"
-
-#. Description of the plugin/theme
-msgid "AntiRobot Contact Form is a fast and simple spam-blocking contact form using the reCAPTCHA 2.0 API."
-msgstr "Formularz kontaktowy AntiRobot to szybki i łatwy formularz kontaktowy, który blokuje niechcianych użytkowników za pomocą interfejsu API reCAPTCHA 2.0."
-
-#. Plugin URI of the plugin/theme
-msgid "https://wordpress.org/plugins/antirobot-contact-form/"
-msgstr "https://wordpress.org/plugins/antirobot-contact-form/"
-
-#: index.php:354
-msgid "If this Plugin has done its job saving your time, <a href=\"https://wordpress.org/support/view/plugin-reviews/antirobot-contact-form#postform\">leave a review</a> and spread the word. If you want to support my coffee addiction, you can <a href=\"https://www.paypal.com/cgi-bin/webscr?cmd=_s-xclick&hosted_button_id=DCGHNCDNK4XU4\">tip me on paypal</a>.</p>"
-msgstr "Si cette extension vous a fait gagner du temps, <a href=\"https://wordpress.org/support/view/plugin-reviews/antirobot-contact-form#postform\">rédigez un avis</a> et faites passer le message. Si vous voulez soutenir mon addiction au café, vous pouvez <a href=\"https://www.paypal.com/cgi-bin/webscr?cmd=_s-xclick&hosted_button_id=DCGHNCDNK4XU4\">m’envoyer un pourboire avec PayPal</a>.</p>"
-
-#: index.php:352
-msgid "Did you save time?"
-msgstr "Czy oszczędziłeś czas ?"
-
-#: index.php:349
-msgid "After setting up, you may insert the shortcode <code>[antirobot_contact_form]</code> on pages or posts to display the contact form."
-msgstr "Po ustawieniu, można wstawić shortcode <code> [antirobot_contact_form] </code> na stronach lub postów, aby wyświetlić formularz kontaktowy."
-
-#: index.php:347
-msgid "Usage"
-msgstr "Zastosowanie"
-
-#: index.php:289
-msgid "Subject"
-msgstr "Zagadnienie"
-
-#: index.php:276
-msgid "Recipient"
-msgstr "Adresat"
-
-#: index.php:263
-msgid "Secret Key"
-msgstr "Tajny klucz"
-
-#: index.php:250
-msgid "Public Key"
-msgstr "Klucz publiczny"
-
-#: index.php:236
-msgid "Get your keys"
-msgstr "Zdobądź klucze"
-
-#. #-#-#-#-#  tmp-antirobot-contact-form.pot (AntiRobot Contact Form 1.8.1)
-#. Plugin Name of the plugin/theme
-#: index.php:234
-msgid "AntiRobot Contact Form"
-msgstr "AntiRobot Formularz kontaktowy"
-
-#: index.php:174
-msgid "Mail Delivery with wp_mail() failed. Is your web server configuration allowing to send mails?"
-msgstr "Dostarczanie poczty z wp_mail () nie powiodło się. Czy Twoja konfiguracja serwera www pozwala na wysyłanie maili?"
-
-#: index.php:168
-msgid "Message successfully sent. You will receive an E-Mail confirmation soon."
-msgstr "Wiadomość została wysłana pomyślnie. Wkrótce otrzymasz E-mail z potwierdzeniem."
-
-#: index.php:157
-msgid "reCAPTCHA did not authorize your request. Make sure your keys are correct."
-msgstr "reCAPTCHA nie autoryzuje Państwa żądania. Upewnij się, że klucze są prawidłowe."
-
-#: index.php:148
-msgid "Please solve the reCAPTCHA before submitting the form."
-msgstr "Proszę rozwiązać reCAPTCHA przed wysłaniem formularza."
-
-#: index.php:129
-msgid "You successfully sent us an E-Mail!"
-msgstr "Z powodzeniem wysłałeś nam E-mail!"
-
-#. translators: 1: Admin E-Mail 2: WordPress URL
-#: index.php:122
-msgid "You successfully sent the following message to %1$s (via %2$s)"
-msgstr "Pomyślnie wysłano następujący komunikat do%1$s (za pomocą%2$s)"
-
-#. translators: 1: Sender Name 2: Sender E-Mail
-#: index.php:113
-msgid "You received a new message from %1$s <%2$s>"
-msgstr "Otrzymałeś nową wiadomość z%1$s <%2$s >"
-
-#: index.php:87 index.php:91
-msgid "Submit"
-msgstr "Wyślij"
-
-#: index.php:192
-msgid "Enter your message here"
-msgstr "Wprowadź treść wiadomości..."
-
-#: index.php:59
-msgid "Your Message"
-msgstr "Twoja wiadomość"
-
-#: index.php:178
-msgid "mail@example.org"
-msgstr "e-mail@exemple.org"
-
-#: index.php:49
-msgid "E-Mail"
-msgstr "E-mail"
-
-#: index.php:
+#: index.php:70
 msgid "Company name"
 msgstr "Nazwa firmy"
 
-#: index.php:
+#: index.php:78
 msgid "Best Company"
 msgstr "Best Company"
 
-#: index.php:
+#: index.php:90
 msgid "Name *"
 msgstr "Nazwa"
 
-#: index.php:
+#: index.php:95
 msgid "Name Surname"
 msgstr "Imię Nazwisko"
 
-#: index.php:
+#: index.php:108
 msgid "Country *"
 msgstr "Kraj *"
 
-#: index.php:
+#: index.php:113
 msgid "Country"
 msgstr "Kraj"
 
-#: index.php:
+#: index.php:126
 msgid "Adress *"
 msgstr "Adres *"
 
-#: index.php:
+#: index.php:131
 msgid "Street and Home number"
 msgstr "Ulica i numer domu"
 
-#: index.php:
+#: index.php:145
 msgid "Postcode and City"
 msgstr "Kod pocztowy i miasto"
 
-#: index.php:
+#: index.php:157
 msgid "Telephone *"
 msgstr "Telefon *"
 
-#: index.php:
+#: index.php:162
+msgid "+00 888 888 888"
+msgstr ""
+
+#: index.php:175
+msgid "E-Mail"
+msgstr "E-mail"
+
+#: index.php:181
+msgid "mail@example.org"
+msgstr "e-mail@exemple.org"
+
+#: index.php:195
+msgid "Your Message"
+msgstr "Twoja wiadomość"
+
+#: index.php:201
+msgid "Enter your message here"
+msgstr "Wprowadź treść wiadomości..."
+
+#: index.php:207
 msgid "*required"
 msgstr "* wymagane"
 
-#: index.php:
-msgid "*By submitting to this form you agree to collect and process, your data for contact purpose."
-msgstr "* Zgadzam się na przechowywanie oraz przetwarzanie danych, dla celów kontaktowych."
+#: index.php:211
+msgid ""
+"*By submitting to this form you agree to collect and process, your data for "
+"contact and marketing purpose. You will be subscribed to our mailing list."
+msgstr ""
+"* Przesyłając do tego formularza wyrażają Państwo zgodę na gromadzenie i "
+"przetwarzanie danych do celów kontaktowych i marketingowych. Zostaniesz "
+"zapisany na naszej liście mailingowej."
+
+#: index.php:266 index.php:274
+msgid "Submit"
+msgstr "Wyślij"
+
+#: index.php:348
+#, php-format
+msgid ""
+"\n"
+"You received a new message \n"
+"From: %1$s, \n"
+"Company: %2$s, \n"
+"Placed in: %3$s, \n"
+"Adress: \n"
+"Street %4$s, \n"
+"City: %5$s, \n"
+"E-mail: %6$s, \n"
+"Telephone: %7$s,\n"
+"The message text:"
+msgstr ""
+
+#: index.php:386
+#, php-format
+msgid "You successfully sent the following message to %1$s (via %3$s)"
+msgstr "Pomyślnie wysłano następujący komunikat do%1$s (za pomocą%3$s)"
+
+#: index.php:402
+msgid "You successfully sent us an E-Mail!"
+msgstr "Z powodzeniem wysłałeś nam E-mail!"
+
+#: index.php:440
+msgid "Please solve the reCAPTCHA before submitting the form."
+msgstr "Proszę rozwiązać reCAPTCHA przed wysłaniem formularza."
+
+#: index.php:458
+msgid ""
+"reCAPTCHA did not authorize your request. Make sure your keys are correct."
+msgstr ""
+"reCAPTCHA nie autoryzuje Państwa żądania. Upewnij się, że klucze są "
+"prawidłowe."
+
+#: index.php:488
+msgid ""
+"Message successfully sent. You will receive an E-Mail confirmation soon."
+msgstr ""
+"Wiadomość została wysłana pomyślnie. Wkrótce otrzymasz E-mail z "
+"potwierdzeniem."
+
+#: index.php:500
+msgid ""
+"Mail Delivery with wp_mail() failed. Is your web server configuration "
+"allowing to send mails?"
+msgstr ""
+"Dostarczanie poczty z wp_mail () nie powiodło się. Czy Twoja konfiguracja "
+"serwera www pozwala na wysyłanie maili?"
+
+#: index.php:623
+msgid "AntiRobot Contact Form"
+msgstr "AntiRobot Formularz kontaktowy"
+
+#: index.php:627
+msgid "Get your keys"
+msgstr "Zdobądź klucze"
+
+#: index.php:655
+msgid "Public Key"
+msgstr "Klucz publiczny"
+
+#: index.php:681
+msgid "Secret Key"
+msgstr "Tajny klucz"
+
+#: index.php:707
+msgid "Recipient"
+msgstr "Adresat"
+
+#: index.php:727
+#, fuzzy
+#| msgid "Recipient"
+msgid "Recipient2"
+msgstr "Adresat"
+
+#: index.php:753
+msgid "Subject"
+msgstr "Zagadnienie"
+
+#: index.php:777 index.php:787
+msgid "Invisible reCAPTCHA"
+msgstr "Niewidoczny reCAPTCHA"
+
+#: index.php:797
+msgid "Enable Invisible reCAPTCHA"
+msgstr "Włącz niewidoczny reCAPTCHA"
+
+#: index.php:803
+msgid ""
+"Enable or Disable Invisible reCAPTCHA. This also needs to be set at the "
+"reCAPTCHA site settings."
+msgstr ""
+"Włącz lub wyłącz Niewidoczny reCAPTCHA. Należy to również ustawić w "
+"ustawieniach witryny reCAPTCHA."
+
+#: index.php:819 index.php:829
+msgid "Placeholder Visibility"
+msgstr "Widoczność tekstów wskazań"
+
+#: index.php:839
+msgid "Show Placeholders"
+msgstr "Pokaż teksty wskazań"
+
+#: index.php:845
+msgid "This controls the display of the placeholder attributes."
+msgstr "Kontroluje wyświetlanie atrybutów zastępczych."
+
+#: index.php:861 index.php:871
+msgid "Redirection"
+msgstr ""
+
+#: index.php:887
+msgid "Disable"
+msgstr ""
+
+#: index.php:897
+msgid "Select a page to redirect to after form submission."
+msgstr ""
+
+#~ msgid "https://pascalebeier.de/"
+#~ msgstr "https://pascalebeier.de/"
+
+#~ msgid "Pascale Beier"
+#~ msgstr "Pascale Beier"
+
+#~ msgid ""
+#~ "AntiRobot Contact Form is a fast and simple spam-blocking contact form "
+#~ "using the reCAPTCHA 2.0 API."
+#~ msgstr ""
+#~ "Formularz kontaktowy AntiRobot to szybki i łatwy formularz kontaktowy, "
+#~ "który blokuje niechcianych użytkowników za pomocą interfejsu API "
+#~ "reCAPTCHA 2.0."
+
+#~ msgid "https://wordpress.org/plugins/antirobot-contact-form/"
+#~ msgstr "https://wordpress.org/plugins/antirobot-contact-form/"
+
+#~ msgid ""
+#~ "If this Plugin has done its job saving your time, <a href=\"https://"
+#~ "wordpress.org/support/view/plugin-reviews/antirobot-contact-form#postform"
+#~ "\">leave a review</a> and spread the word. If you want to support my "
+#~ "coffee addiction, you can <a href=\"https://www.paypal.com/cgi-bin/webscr?"
+#~ "cmd=_s-xclick&hosted_button_id=DCGHNCDNK4XU4\">tip me on paypal</a>.</p>"
+#~ msgstr ""
+#~ "Si cette extension vous a fait gagner du temps, <a href=\"https://"
+#~ "wordpress.org/support/view/plugin-reviews/antirobot-contact-form#postform"
+#~ "\">rédigez un avis</a> et faites passer le message. Si vous voulez "
+#~ "soutenir mon addiction au café, vous pouvez <a href=\"https://www.paypal."
+#~ "com/cgi-bin/webscr?cmd=_s-"
+#~ "xclick&hosted_button_id=DCGHNCDNK4XU4\">m’envoyer un pourboire avec "
+#~ "PayPal</a>.</p>"
+
+#~ msgid "Did you save time?"
+#~ msgstr "Czy oszczędziłeś czas ?"
+
+#~ msgid ""
+#~ "After setting up, you may insert the shortcode "
+#~ "<code>[antirobot_contact_form]</code> on pages or posts to display the "
+#~ "contact form."
+#~ msgstr ""
+#~ "Po ustawieniu, można wstawić shortcode <code> [antirobot_contact_form] </"
+#~ "code> na stronach lub postów, aby wyświetlić formularz kontaktowy."
+
+#~ msgid "Usage"
+#~ msgstr "Zastosowanie"
+
+#~ msgid "You received a new message from %1$s <%2$s>"
+#~ msgstr "Otrzymałeś nową wiadomość z%1$s <%2$s >"

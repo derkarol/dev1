@@ -41,6 +41,10 @@
 					<div class="model-name space-t-b"  >
 						<a href="<?php echo get_the_permalink(get_the_ID()); ?>">
 						<?php the_title( '<h4 class="my-entry-title" >', '</h4>' ); ?>
+							<?php the_content( sprintf( '<h2>Where are we?</h2>' ,
+			__( 'Continue reading<span class="screen-reader-text"> "%s"</span>', 'twentyseventeen' ),
+			get_the_title()	
+			) ); ?>
 						</a>
 						<div class="model-name space-t-b" <?php the_field('graphic-aos_1');?>>
 							<?php if( get_field('img') ): ?>

@@ -1,0 +1,263 @@
+# Translation of Plugins - AntiRobot Contact Form - Development (trunk) in French (France)
+# This file is distributed under the same license as the Plugins - AntiRobot Contact Form - Development (trunk) package.
+msgid ""
+msgstr ""
+"Project-Id-Version: Plugins - AntiRobot Contact Form - Development (trunk)\n"
+"POT-Creation-Date: 2018-12-07 13:49+0100\n"
+"PO-Revision-Date: 2018-12-07 14:13+0100\n"
+"Last-Translator: \n"
+"Language-Team: \n"
+"Language: fr\n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=UTF-8\n"
+"Content-Transfer-Encoding: 8bit\n"
+"Plural-Forms: nplurals=2; plural=n > 1;\n"
+"X-Generator: Poedit 2.2\n"
+
+#: index.php:70
+msgid "Company name"
+msgstr "Bedrijfsnaam"
+
+#: index.php:78
+msgid "Best Company"
+msgstr "Beste bedrijf"
+
+#: index.php:90
+msgid "Name *"
+msgstr "Naam*"
+
+#: index.php:95
+msgid "Name Surname"
+msgstr "Naam en voornaam"
+
+#: index.php:108
+msgid "Country *"
+msgstr "Land*"
+
+#: index.php:113
+msgid "Country"
+msgstr "Land"
+
+#: index.php:126
+msgid "Adress *"
+msgstr "Adres *"
+
+#: index.php:131
+msgid "Street and Home number"
+msgstr "Straatnaam en huisnummer "
+
+#: index.php:145
+msgid "Postcode and City"
+msgstr "Postcode en stad "
+
+#: index.php:157
+msgid "Telephone *"
+msgstr "Telefoon*"
+
+#: index.php:162
+msgid "+00 888 888 888"
+msgstr ""
+
+#: index.php:175
+msgid "E-Mail"
+msgstr "E-mail"
+
+#: index.php:181
+msgid "mail@example.org"
+msgstr "e-mail@voorbeeld.org"
+
+#: index.php:195
+msgid "Your Message"
+msgstr "uw bericht "
+
+#: index.php:201
+msgid "Enter your message here"
+msgstr "Geef hier uw bericht in "
+
+#: index.php:207
+msgid "*required"
+msgstr "*verplicht"
+
+#: index.php:211
+msgid ""
+"*By submitting to this form you agree to collect and process, your data for "
+"contact and marketing purpose. You will be subscribed to our mailing list."
+msgstr ""
+"* En soumettant à ce formulaire vous acceptez de collecter et de traiter, "
+"vos données pour le contact et le but du marketing. Vous serez abonné à "
+"notre liste de diffusion."
+
+#: index.php:266 index.php:274
+msgid "Submit"
+msgstr "Verstuur"
+
+#: index.php:348
+#, php-format
+msgid ""
+"\n"
+"You received a new message \n"
+"From: %1$s, \n"
+"Company: %2$s, \n"
+"Placed in: %3$s, \n"
+"Adress: \n"
+"Street %4$s, \n"
+"City: %5$s, \n"
+"E-mail: %6$s, \n"
+"Telephone: %7$s,\n"
+"The message text:"
+msgstr ""
+
+#: index.php:386
+#, fuzzy, php-format
+#| msgid "You successfully sent the following message to %1$s (via %2$s)"
+msgid "You successfully sent the following message to %1$s (via %3$s)"
+msgstr ""
+"U hebt het volgende bericht met succes verzonden naar% 1 $ s (via% 2 $ s)"
+
+#: index.php:402
+msgid "You successfully sent us an E-Mail!"
+msgstr "Je hebt ons met succes een e-mail gestuurd!"
+
+#: index.php:440
+msgid "Please solve the reCAPTCHA before submitting the form."
+msgstr "Los de reCAPTCHA op voordat u het formulier verzendt."
+
+#: index.php:458
+msgid ""
+"reCAPTCHA did not authorize your request. Make sure your keys are correct."
+msgstr ""
+"reCAPTCHA heeft uw verzoek niet geautoriseerd. Zorg ervoor dat uw sleutels "
+"correct zijn.."
+
+#: index.php:488
+msgid ""
+"Message successfully sent. You will receive an E-Mail confirmation soon."
+msgstr ""
+"Bericht succesvol verzonden. U ontvangt binnenkort een e-mailbevestiging."
+
+#: index.php:500
+msgid ""
+"Mail Delivery with wp_mail() failed. Is your web server configuration "
+"allowing to send mails?"
+msgstr ""
+"E-mailbezorging met wp_mail () is mislukt. Is de configuratie van uw "
+"webserver geschikt voor het verzenden van e-mails?"
+
+#: index.php:623
+msgid "AntiRobot Contact Form"
+msgstr "AntiRobot Contact Form"
+
+#: index.php:627
+msgid "Get your keys"
+msgstr "Verkrijg uw sleutels "
+
+#: index.php:655
+msgid "Public Key"
+msgstr "Publieke sleutel "
+
+#: index.php:681
+msgid "Secret Key"
+msgstr "beveiligde sleutel "
+
+#: index.php:707
+msgid "Recipient"
+msgstr "Ontvanger"
+
+#: index.php:727
+#, fuzzy
+#| msgid "Recipient"
+msgid "Recipient2"
+msgstr "Ontvanger"
+
+#: index.php:753
+msgid "Subject"
+msgstr "Onderwerp"
+
+#: index.php:777 index.php:787
+msgid "Invisible reCAPTCHA"
+msgstr "Onzichtbare reCAPTCHA"
+
+#: index.php:797
+msgid "Enable Invisible reCAPTCHA"
+msgstr "Activeer onzichtbaar reCAPTCHA"
+
+#: index.php:803
+msgid ""
+"Enable or Disable Invisible reCAPTCHA. This also needs to be set at the "
+"reCAPTCHA site settings."
+msgstr ""
+" Activeer of desactiveer onzichtbaar reCAPTCHA. Dit moet ook bepaald worden "
+"in de parameters van de website reCAPTCHA."
+
+#: index.php:819 index.php:829
+msgid "Placeholder Visibility"
+msgstr "zichtbaarheid van de plaatsaanduiding"
+
+#: index.php:839
+msgid "Show Placeholders"
+msgstr "Plaatsaanduidingen weergeven"
+
+#: index.php:845
+msgid "This controls the display of the placeholder attributes."
+msgstr ""
+"Hiermee bepaalt u de weergave van de kenmerken voor plaatsaanduidingen."
+
+#: index.php:861 index.php:871
+msgid "Redirection"
+msgstr ""
+
+#: index.php:887
+msgid "Disable"
+msgstr ""
+
+#: index.php:897
+msgid "Select a page to redirect to after form submission."
+msgstr ""
+
+#~ msgid "https://pascalebeier.de/"
+#~ msgstr "https://pascalebeier.de/"
+
+#~ msgid "Pascale Beier"
+#~ msgstr "Pascale Beier"
+
+#~ msgid ""
+#~ "AntiRobot Contact Form is a fast and simple spam-blocking contact form "
+#~ "using the reCAPTCHA 2.0 API."
+#~ msgstr ""
+#~ "AntiRobot Contact Form  is een snel en simpel spam-blocking contact "
+#~ "formulier, gebruik makend van reCAPTCHA 2.0."
+
+#~ msgid "https://wordpress.org/plugins/antirobot-contact-form/"
+#~ msgstr "https://wordpress.org/plugins/antirobot-contact-form/"
+
+#~ msgid ""
+#~ "If this Plugin has done its job saving your time, <a href=\"https://"
+#~ "wordpress.org/support/view/plugin-reviews/antirobot-contact-form#postform"
+#~ "\">leave a review</a> and spread the word. If you want to support my "
+#~ "coffee addiction, you can <a href=\"https://www.paypal.com/cgi-bin/webscr?"
+#~ "cmd=_s-xclick&hosted_button_id=DCGHNCDNK4XU4\">tip me on paypal</a>.</p>"
+#~ msgstr ""
+#~ "Wanneer de plugin zijn job heeft gedaan en u tijd bespraart, <a href="
+#~ "\"https://wordpress.org/support/view/plugin-reviews/antirobot-contact-"
+#~ "form#postform\">rédigez un avis</a> et faites passer le message. Si vous "
+#~ "voulez soutenir mon addiction au café, vous pouvez <a href=\"https://www."
+#~ "paypal.com/cgi-bin/webscr?cmd=_s-xclick&hosted_button_id=DCGHNCDNK4XU4\"> "
+#~ "stuur mij een fooi per PayPal</a>.</p>"
+
+#~ msgid "Did you save time?"
+#~ msgstr "Heeft u tijd bespaart ? "
+
+#~ msgid ""
+#~ "After setting up, you may insert the shortcode "
+#~ "<code>[antirobot_contact_form]</code> on pages or posts to display the "
+#~ "contact form."
+#~ msgstr ""
+#~ "na het instellen kunt u de shortcode <code> [antirobot_contact_form] </ "
+#~ "code> op pagina's of berichten invoegen om het contactformulier weer te "
+#~ "geven."
+
+#~ msgid "Usage"
+#~ msgstr "Gebruik"
+
+#~ msgid "You received a new message from %1$s <%2$s>"
+#~ msgstr "U hebt een nieuw bericht ontvangen van% 1 $ s <% 2 $ s>"

@@ -1,6 +1,6 @@
 <?php
 /**
- * Template part for displaying posts with excerpts
+ * Template part for displaying posts with excerpts <O.O> also It puts wht small news box on hero main gets to display
  *
  * Used in Search Results and for Recent Posts in Front Page panels.
  *

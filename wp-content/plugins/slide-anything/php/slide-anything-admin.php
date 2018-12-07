@@ -80,8 +80,9 @@ function cpt_slider_plugin_activation() {
 		update_post_meta($cpt_id, 'sa_shortcodes', '0');
 		update_post_meta($cpt_id, 'sa_random_order', '1');
 		update_post_meta($cpt_id, 'sa_reverse_order', '0');
-		update_post_meta($cpt_id, 'sa_mouse_drag', '1');
+		update_post_meta($cpt_id, 'sa_mouse_drag', '0');
 		update_post_meta($cpt_id, 'sa_touch_drag', '1');
+		update_post_meta($cpt_id, 'sa_auto_height', '0');
 		update_post_meta($cpt_id, 'sa_items_width1', 1);
 		update_post_meta($cpt_id, 'sa_items_width2', 2);
 		update_post_meta($cpt_id, 'sa_items_width3', 3);
@@ -117,17 +118,17 @@ function version_20_upgrade_notice() {
 	if (!get_user_meta($user_id, 'sa_ignore_notice')) {
 		echo "<div class='notice notice-info' style='padding-top:10px;'>";
 
-		echo "<div style='float:left; width:170px; margin-right:15px;'><a href='http://edgewebpages.com/' target='_blank'>";
-		echo "<img style='width:100%;' src='http://edgewebpages.com/wp-content/uploads/2017/06/slide_anything_pro_product_image.png' /></a></div>";
+		echo "<div style='float:left; width:170px; margin-right:15px;'><a href='https://edgewebpages.com/' target='_blank'>";
+		echo "<img style='width:100%;' src='https://edgewebpages.com/wp-content/uploads/2017/06/slide_anything_pro_product_image.png' /></a></div>";
 		echo "<h3 style='margin:0px !important; padding:10px 0px !important;'>SLIDE ANYTHING PRO</h3>";
-		echo "<p style='margin:0px 0px 10px !important;'><a href='http://edgewebpages.com/' target='_blank'>SLIDE ANYTHING PRO</a> ";
+		echo "<p style='margin:0px 0px 10px !important;'><a href='https://edgewebpages.com/' target='_blank'>SLIDE ANYTHING PRO</a> ";
 		echo "adds POPUPS into the mix!!</p>";
-		echo "<p style='margin:0px 0px 10px !important;'>With <a href='http://edgewebpages.com/' target='_blank'>SLIDE ANYTHING PRO</a> ";
+		echo "<p style='margin:0px 0px 10px !important;'>With <a href='https://edgewebpages.com/' target='_blank'>SLIDE ANYTHING PRO</a> ";
 		echo "each slide can now open a MODAL POPUP, which can be an IMAGE popup, a VIDEO EMBED popup (YouTube/Vimeo), a popup containing ";
 		echo "HTML CODE or a popup displaying a WordPress SHORTCODE. This can be a very useful addition to Slide Anything, if you are ";
 		echo "wanting to create Image or Video galleries for your websites.</p>";
 		echo "<p style='margin:0px 0px 10px !important;'>For more information about Slide Anything PRO, ";
-		echo "<a href='http://edgewebpages.com/' target='_blank'>CLICK HERE.</a></p>";
+		echo "<a href='https://edgewebpages.com/' target='_blank'>CLICK HERE.</a></p>";
 
 		echo "<div style='clear:both; float:none; width:100%; height:10px;'></div>";
 		echo "<a style='display:inline-block; float:right; padding:7px 10px; background:crimson; color:white; text-decoration:none; ";
@@ -445,7 +446,7 @@ function cpt_slider_settings_content($post) {
 		$slide_duration = 5;
 	}
 	echo "<div class='sa_slider_value'><span>Slide Duration:</span>";
-	echo "<input type='text' id='sa_slide_duration' name='sa_slide_duration' readonly value='".esc_attr($slide_duration)."'><em>seconds</em>";
+	echo "<input type='text' id='sa_slide_duration' name='sa_slide_duration' readonly value='".esc_attr($slide_duration)."'><em>seconds (0 = manual navigation)</em>";
 	echo "<em class='sa_tooltip' href='' title='Set to 0 to disable slider autoplay (manual slider navigation only)'></em></div>\n";
 	echo "<div class='jquery_ui_slider' id='jq_slider_duration'></div><hr/>\n";
 	// SLIDE TRANSITION
@@ -463,8 +464,8 @@ function cpt_slider_settings_content($post) {
 		$slide_by = 1;
 	}
 	echo "<div class='sa_slider_value'><span>Slide By:</span>";
-	echo "<input type='text' id='sa_slide_by' name='sa_slide_by' readonly value='".esc_attr($slide_by)."'><em>slides</em>";
-	echo "<em class='sa_tooltip' href='' title='The number of slides to slide per transition'></em></div>\n";
+	echo "<input type='text' id='sa_slide_by' name='sa_slide_by' readonly value='".esc_attr($slide_by)."'><em>slides (0 = slide by page)</em>";
+	echo "<em class='sa_tooltip' href='' title='The number of slides to slide per transition. Set to 0 to enable the Slide by Page option.'></em></div>\n";
 	echo "<div class='jquery_ui_slider' id='jq_slider_by'></div><hr/>\n";
 	echo "<div class='half_width_column'>\n";
 	// LOOP SLIDER
@@ -564,7 +565,7 @@ function cpt_slider_settings_content($post) {
 	// MOUSE DRAG
 	$mouse_drag = get_post_meta($post->ID, 'sa_mouse_drag', true);
 	if ($mouse_drag == '') {
-		$mouse_drag = '1';
+		$mouse_drag = '0';
 	}
 	echo "<div class='sa_setting_checkbox'><span>Mouse Drag:</span>";
 	if ($mouse_drag == '1') {
@@ -572,7 +573,7 @@ function cpt_slider_settings_content($post) {
 	} else {
 		echo "<input type='checkbox' id='sa_mouse_drag' name='sa_mouse_drag' value='1'/>";
 	}
-	echo "<em class='sa_tooltip' href='' title='Allow navigation to previous/next slides by holding down left mouse button and dragging left/right'></em>\n";
+	echo "<em class='sa_tooltip' href='' title='Allow navigation to previous/next slides by holding down left mouse button and dragging left/right. (NOTE: Enabling this option will disable vertical touch-drag scrolling on mobile devices)'></em>\n";
 	echo "</div>\n";
 	// TOUCH DRAG
 	$touch_drag = get_post_meta($post->ID, 'sa_touch_drag', true);
@@ -586,6 +587,19 @@ function cpt_slider_settings_content($post) {
 		echo "<input type='checkbox' id='sa_touch_drag' name='sa_touch_drag' value='1'/>";
 	}
 	echo "<em class='sa_tooltip' href='' title='Allow navigation to previous/next slides on mobile devices by touching screen and dragging left/right'></em>\n";
+	echo "</div>\n";
+	// AUTO HEIGHT
+	$auto_height = get_post_meta($post->ID, 'sa_auto_height', true);
+	if ($auto_height == '') {
+		$auto_height = '0';
+	}
+	echo "<div class='sa_setting_checkbox'><span>Auto Height:</span>";
+	if ($auto_height == '1') {
+		echo "<input type='checkbox' id='sa_auto_height' name='sa_auto_height' value='1' checked/>";
+	} else {
+		echo "<input type='checkbox' id='sa_auto_height' name='sa_auto_height' value='1'/>";
+	}
+	echo "<em class='sa_tooltip' title='Only works with 1 item on the screen. When checked the height of slider is automatically changed to match the height for each slide.'></em>";
 	echo "</div>\n";
 	echo "</div>\n";
 	echo "<div style='clear:both; float:none; width:100%; height:1px;'></div>\n";
@@ -1246,7 +1260,7 @@ function cpt_slider_slides_content($post) {
 			echo "<li>Or your Slide Anything sliders can conatin a combination of image, video, HTML and shortcode popups!</li>\n";
 			echo "</ul>\n";
 			echo "<p>To find out more about <strong>SLIDE ANYTHING PRO</strong>, view demos or get your hands on a copy, click ";
-			echo "<a href='http://edgewebpages.com' title='Slide Anything PRO' target='_blank'>HERE</a>.</p>";
+			echo "<a href='https://edgewebpages.com' title='Slide Anything PRO' target='_blank'>HERE</a>.</p>";
 			echo "</div>\n";
 		}
 		echo "</div>\n";
@@ -1645,6 +1659,54 @@ function cpt_slider_style_content($post) {
 	}
 	echo "</select></div>\n";
 
+	echo "<h4 style='margin-top:10px !important;'>Other Settings:</h4>";
+
+	// USE 'window.onload' EVENT (checkbox)
+	$window_onload = get_post_meta($post->ID, 'sa_window_onload', true);
+	if ($window_onload == '') {
+		$window_onload = '0';
+	}
+	$tooltip =  'Use window.onload event (not document.ready). Use this option if your slider is ';
+	$tooltip .= 'not being sized correctly within your page container (sometimes occurs with Visual Composer full-width sections).';
+	echo "<div id='sa_window_onload_line'>";
+	echo "<span class='sa_tooltip' title='".$tooltip."'></span><span style='min-width:160px;'>Use 'window.onload' event:</span>";
+	if ($window_onload == '1') {
+		echo "<input type='checkbox' id='sa_window_onload' name='sa_window_onload' value='1' checked/>";
+	} else {
+		echo "<input type='checkbox' id='sa_window_onload' name='sa_window_onload' value='1'/>";
+	}
+	echo "</div>\n";
+
+	// Strip JavaScript from Content
+	$strip_javascript = get_post_meta($post->ID, 'sa_strip_javascript', true);
+	if ($strip_javascript == '') {
+		$strip_javascript = '0';
+	}
+	$tooltip = 'Remove JavaScript (<script> tags) from slide content for extra security.';
+	echo "<div id='sa_window_onload_line'>";
+	echo "<span class='sa_tooltip' title='".$tooltip."'></span><span style='min-width:160px;'>Remove JavaScript Content:</span>";
+	if ($strip_javascript == '1') {
+		echo "<input type='checkbox' id='sa_strip_javascript' name='sa_strip_javascript' value='1' checked/>";
+	} else {
+		echo "<input type='checkbox' id='sa_strip_javascript' name='sa_strip_javascript' value='1'/>";
+	}
+	echo "</div>\n";
+
+	// Enable Lazy Load Images
+	$lazy_load_images = get_post_meta($post->ID, 'sa_lazy_load_images', true);
+	if ($lazy_load_images == '') {
+		$lazy_load_images = '0';
+	}
+	$tooltip = "Enable &quot;Lazy Load&quot; for images added to your slide content (note: does not apply to slide backgrounds).";
+	echo "<div id='sa_window_onload_line'>";
+	echo "<span class='sa_tooltip' title='".$tooltip."'></span><span style='min-width:160px;'>Enable 'Lazy Load' Images:</span>";
+	if ($lazy_load_images == '1') {
+		echo "<input type='checkbox' id='sa_lazy_load_images' name='sa_lazy_load_images' value='1' checked/>";
+	} else {
+		echo "<input type='checkbox' id='sa_lazy_load_images' name='sa_lazy_load_images' value='1'/>";
+	}
+	echo "</div>\n";
+
 	echo "</div>\n";
 }
 
@@ -1973,6 +2035,11 @@ function cpt_slider_save_postdata() {
 		} else {
 			update_post_meta($post->ID, 'sa_touch_drag', '0');
 		}
+		if (isset($_POST['sa_auto_height']) && ($_POST['sa_auto_height'] == '1')) {
+			update_post_meta($post->ID, 'sa_auto_height', '1');
+		} else {
+			update_post_meta($post->ID, 'sa_auto_height', '0');
+		}
 
 		// UPDATE SLIDER ITEMS DISPLAYED
 		update_post_meta($post->ID, 'sa_items_width1', abs(intval($_POST['sa_items_width1'])));		// SANATIZE
@@ -2013,6 +2080,23 @@ function cpt_slider_save_postdata() {
 			update_post_meta($post->ID, 'sa_slide_icons_visible', '1');
 		} else {
 			update_post_meta($post->ID, 'sa_slide_icons_visible', '0');
+		}
+
+		// OTHER SETTINGS
+		if (isset($_POST['sa_window_onload']) && ($_POST['sa_window_onload'] == '1')) {
+			update_post_meta($post->ID, 'sa_window_onload', '1');
+		} else {
+			update_post_meta($post->ID, 'sa_window_onload', '0');
+		}
+		if (isset($_POST['sa_strip_javascript']) && ($_POST['sa_strip_javascript'] == '1')) {
+			update_post_meta($post->ID, 'sa_strip_javascript', '1');
+		} else {
+			update_post_meta($post->ID, 'sa_strip_javascript', '0');
+		}
+		if (isset($_POST['sa_lazy_load_images']) && ($_POST['sa_lazy_load_images'] == '1')) {
+			update_post_meta($post->ID, 'sa_lazy_load_images', '1');
+		} else {
+			update_post_meta($post->ID, 'sa_lazy_load_images', '0');
 		}
 	}
 }

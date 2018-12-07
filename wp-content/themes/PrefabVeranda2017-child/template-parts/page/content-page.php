@@ -26,9 +26,11 @@
 			  <use xlink:href="#<?php the_field('svg_id');?>" />
 			</svg>
 		</div>
-		<!-- my attempt to do site navigation -->
+		<?php if( get_field('side_nav_title')): ?>
+		<h4 class=""><?php the_field('side_nav_title');?></h4>
+		<?php endif; ?>
 				<nav class="site-nav children-links">
-					<ul style="list-style: none;">
+					<ul class="list-no-style">
 						<?php 
 							$args = array(
 								'child_of' => get_top_ancestor_id(),

@@ -6,7 +6,7 @@ class UninstallView_bwg extends AdminView_bwg {
    *
    * @param $params
    */
-  public function display($params) {
+  public function display($params = array()) {
     ob_start();
     echo $this->body($params);
     // Pass the content to form.
@@ -24,7 +24,7 @@ class UninstallView_bwg extends AdminView_bwg {
    *
    * @param $params
    */
-  public function body( $params ) {
+  public function body( $params = array() ) {
     $deactivate_url = add_query_arg(array(
                                       'action' => 'deactivate',
                                       'plugin' => BWG()->main_file,
@@ -47,8 +47,8 @@ class UninstallView_bwg extends AdminView_bwg {
     ?>
     <div class="goodbye-text">
       <?php
-      $support_team = '<a href="https://web-dorado.com/support/contact-us.html?source=photo-gallery" target="_blank">' . __('support team', BWG()->prefix) . '</a>';
-      $contact_us = '<a href="https://web-dorado.com/support/contact-us.html?source=photo-gallery" target="_blank">' . __('Contact us', BWG()->prefix) . '</a>';
+      $support_team = '<a href="https://10web.io/contact-us/?source=photo-gallery" target="_blank">' . __('support team', BWG()->prefix) . '</a>';
+      $contact_us = '<a href="https://10web.io/contact-us/?source=photo-gallery" target="_blank">' . __('Contact us', BWG()->prefix) . '</a>';
       echo sprintf(__("Before uninstalling the plugin, please Contact our %s. We'll do our best to help you out with your issue. We value each and every user and value what's right for our users in everything we do.<br />
       However, if anyway you have made a decision to uninstall the plugin, please take a minute to %s and tell what you didn't like for our plugins further improvement and development. Thank you !!!", BWG()->prefix), $support_team, $contact_us); ?>
     </div>

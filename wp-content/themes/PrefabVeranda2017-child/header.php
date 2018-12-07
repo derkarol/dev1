@@ -54,13 +54,14 @@
 
 	
 	<?php
-	// If a regular post or page, and not the front page, show the featured image. && ! twentyseventeen_is_frontpage() /<O.O> changed back/ is_home is seppous to show image in news page however not working like intended at the moment
-	if ( ( is_single() || ( is_page() && ! twentyseventeen_is_frontpage() ) || ( is_home() ) ) && has_post_thumbnail( get_queried_object_id() ) ) :
+	// If a regular post or page, and not the front page, show the featured image. && ! twentyseventeen_is_frontpage() /<O.O> changed back/ is_home is seppous to show image in news page however not working like intended at the moment <--> is_archive( array( 150, 1405, 1412, 1588 ) )
+	if ( ( is_single() || ( is_page() && ! twentyseventeen_is_frontpage() ) || ( is_front_page() && is_home() ) ) && has_post_thumbnail( get_queried_object_id() ) ) :
 		echo '<div class="single-featured-image-header">';
 		the_post_thumbnail( 'twentyseventeen-featured-image' );
 		echo '</div><!-- .single-featured-image-header -->';
 	endif;
 	?>
+	
 
 
 	<div class="site-content-contain">

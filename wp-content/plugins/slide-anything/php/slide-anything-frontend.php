@@ -55,13 +55,6 @@ function slide_anything_shortcode($atts) {
 			$slide_data['css_id'] = $metadata['sa_css_id'][0];
 			for ($i = 1; $i <= $slide_data['num_slides']; $i++) {
 				$slide_data["slide".$i."_num"] = $i;
-				// get the valid content character count and the actual content character count
-				$slide_data["slide".$i."_valid_char_count"] = $metadata["sa_slide".$i."_char_count"][0];
-				if ($slide_data["slide".$i."_valid_char_count"] == 0) {
-					$slide_data["slide".$i."_actual_char_count"] = 0; // valid character count does not exist so set actual count to matching zero
-				} else {
-					$slide_data["slide".$i."_actual_char_count"] = strlen($metadata["sa_slide".$i."_content"][0]);
-				}
 				// apply 'the_content' filter to slide content to process any shortcodes
 				if ($slide_data['shortcodes'] == 'true') {
 					$slide_data["slide".$i."_content"] = do_shortcode($metadata["sa_slide".$i."_content"][0]);
@@ -109,12 +102,12 @@ function slide_anything_shortcode($atts) {
 				}
 			}
 			$slide_data['slide_duration'] = floatval($metadata['sa_slide_duration'][0]) * 1000;
-			if ($slide_data['slide_duration'] == 0) {
-				$slide_data['slide_duration'] = 'false';
-			}
 			$slide_data['slide_transition'] = floatval($metadata['sa_slide_transition'][0]) * 1000;
 			if (isset($metadata['sa_slide_by'][0]) && ($metadata['sa_slide_by'][0] != '')) {
 				$slide_data['slide_by'] = $metadata['sa_slide_by'][0];
+				if ($slide_data['slide_by'] == '0') {
+					$slide_data['slide_by'] = 'page';
+				}
 			} else {
 				$slide_data['slide_by'] = 1;
 			}
@@ -166,6 +159,16 @@ function slide_anything_shortcode($atts) {
 			} else {
 				$slide_data['touch_drag'] = 'false';
 			}
+			if (isset($metadata['sa_auto_height'])) {
+				$slide_data['auto_height'] = $metadata['sa_auto_height'][0];
+				if ($slide_data['auto_height'] == '1') {
+					$slide_data['auto_height'] = 'true';
+				} else {
+					$slide_data['auto_height'] = 'false';
+				}
+			} else {
+				$slide_data['auto_height'] = 'false';
+			}
 			$slide_data['items_width1'] = $metadata['sa_items_width1'][0];
 			$slide_data['items_width2'] = $metadata['sa_items_width2'][0];
 			$slide_data['items_width3'] = $metadata['sa_items_width3'][0];
@@ -204,6 +207,24 @@ function slide_anything_shortcode($atts) {
 			$slide_data['slide_icons_color'] = $metadata['sa_slide_icons_color'][0];
 			if ($slide_data['slide_icons_color'] != 'black') {
 				$slide_data['slide_icons_color'] = 'white';
+			}
+			$slide_data['sa_window_onload'] = '0';
+			if (isset($metadata['sa_window_onload'])) {
+				$slide_data['sa_window_onload'] = $metadata['sa_window_onload'][0];
+				if ($slide_data['sa_window_onload'] != '1') {
+					$slide_data['sa_window_onload'] = '0';
+				}
+			}
+			$slide_data['strip_javascript'] = '0';
+			if (isset($metadata['sa_strip_javascript'])) {
+				$slide_data['strip_javascript'] = $metadata['sa_strip_javascript'][0];
+				if ($slide_data['strip_javascript'] != '1') {
+					$slide_data['strip_javascript'] = '0';
+				}
+			}
+			$slide_data['lazy_load_images'] = '0';
+			if (isset($metadata['sa_lazy_load_images'])) {
+				$slide_data['lazy_load_images'] = $metadata['sa_lazy_load_images'][0];
 			}
 
 			// REVERSE THE ORDER OF THE SLIDES IF 'Random Order' CHECKBOX IS CHECKED OR
@@ -279,19 +300,19 @@ function slide_anything_shortcode($atts) {
 			$wrapper_style .= $slide_data['wrapper_padd_bottom']."px ";
 			$wrapper_style .= $slide_data['wrapper_padd_left']."px;";
 			$output .= "<div class='".$slide_data['slide_icons_color']."' style='".esc_attr($wrapper_style)."'>\n";
+			$additional_classes = '';
 			if ($slide_data['pagination'] == 'true') {
 				if ($slide_data['autohide_arrows'] == 'true') {
-					$output .= "<div id='".esc_attr($slide_data['css_id'])."' class='owl-carousel owl-pagination-true autohide-arrows sa_owl_theme'>\n";
+					$additional_classes = "owl-pagination-true autohide-arrows";
 				} else {
-					$output .= "<div id='".esc_attr($slide_data['css_id'])."' class='owl-carousel owl-pagination-true sa_owl_theme'>\n";
+					$additional_classes = "owl-pagination-true";
 				}
 			} else {
 				if ($slide_data['autohide_arrows'] == 'true') {
-					$output .= "<div id='".esc_attr($slide_data['css_id'])."' class='owl-carousel autohide-arrows sa_owl_theme'>\n";
-				} else {
-					$output .= "<div id='".esc_attr($slide_data['css_id'])."' class='owl-carousel sa_owl_theme'>\n";
+					$additional_classes = "autohide-arrows";
 				}
 			}
+			$output .= "<div id='".esc_attr($slide_data['css_id'])."' class='owl-carousel sa_owl_theme ".$additional_classes."' style='visibility:hidden;'>\n";
 			if ($sa_pro_version) {
 				// PRO VERSION - INITIALISE VAIRABLES FOR MAGNIFIC POPUP
 				$lightbox_function = "open_lightbox_gallery_".$slide_data['css_id'];
@@ -299,107 +320,109 @@ function slide_anything_shortcode($atts) {
 				$lightbox_count = 0;
 			}
 			for ($i = 1; $i <= $slide_data['num_slides']; $i++) {
-				$valid_char_count = $slide_data["slide".$i."_valid_char_count"];
-				$actual_char_count = $slide_data["slide".$i."_actual_char_count"];
-				// validate that slide content contains the correct number of characters, otherwise do not display slide
-				// {to prevent malicious content being inserted into slides)
-				if ($valid_char_count == $actual_char_count) {
-					$slide_content = $slide_data["slide".$i."_content"];
-					$slide_image_src = wp_get_attachment_image_src($slide_data["slide".$i."_image_id"], 'full');
-					// SA PRO VERSION - USE POPUP IMAGE AS SLIDE BACKGROUND IMAGE (IF THIS OPTION SELECTED)
-					if (($sa_pro_version) && ($slide_data["slide".$i."_popup_type"] == 'IMAGE')) {
-						if (($slide_data["slide".$i."_popup_background"] != 'no') && ($slide_data["slide".$i."_popup_image"] != '')) {
-							$slide_image_src = wp_get_attachment_image_src($slide_data["slide".$i."_popup_imageid"], $slide_data["slide".$i."_popup_background"]);
-						}
+				$slide_content = $slide_data["slide".$i."_content"];
+				$slide_image_src = wp_get_attachment_image_src($slide_data["slide".$i."_image_id"], 'full');
+				// SA PRO VERSION - USE POPUP IMAGE AS SLIDE BACKGROUND IMAGE (IF THIS OPTION SELECTED)
+				if (($sa_pro_version) && ($slide_data["slide".$i."_popup_type"] == 'IMAGE')) {
+					if (($slide_data["slide".$i."_popup_background"] != 'no') && ($slide_data["slide".$i."_popup_image"] != '')) {
+						$slide_image_src = wp_get_attachment_image_src($slide_data["slide".$i."_popup_imageid"], $slide_data["slide".$i."_popup_background"]);
 					}
-					$slide_image_size = $slide_data["slide".$i."_image_size"];
-					$slide_image_pos = $slide_data["slide".$i."_image_pos"];
-					$slide_image_repeat = $slide_data["slide".$i."_image_repeat"];
-					$slide_image_color = $slide_data["slide".$i."_image_color"];
-					$slide_style =  "padding:".$slide_data['slide_padding_tb']."% ".$slide_data['slide_padding_lr']."%; ";
-					$slide_style .= "margin:0px ".$slide_data['slide_margin_lr']."%; ";
-					$slide_style .= "background-image:url(\"".$slide_image_src[0]."\"); ";
-					$slide_style .= "background-position:".$slide_image_pos."; ";
-					$slide_style .= "background-size:".$slide_image_size."; ";
-					$slide_style .= "background-repeat:".$slide_image_repeat."; ";
-					$slide_style .= "background-color:".$slide_image_color."; ";
-					if (strpos($slide_data['slide_min_height_perc'], 'px') !== false) {
-						$slide_style .= "min-height:".$slide_data['slide_min_height_perc']."; ";
-					}
-
-					// BUILD SLIDE LINK HOVER BUTTON
-					$link_output = '';
-					if ($slide_data["slide".$i."_link_url"] != '') {
-						$link_output =  "<a class='sa_slide_link_icon' href='".$slide_data["slide".$i."_link_url"]."' ";
-						$link_output .= "target='".$slide_data["slide".$i."_link_target"]."'></a>";
-					}
-
-					// BUILD POPUP HOVER BUTTON - PRO VERSION ONLY!
-					$popup_output = '';
-					if ($sa_pro_version) {
-						if (($slide_data["slide".$i."_popup_type"] == 'IMAGE') && ($slide_data["slide".$i."_popup_image"] != '')) {
-							$lightbox_count++;
-							$popup_output =  "<div class='sa_popup_zoom_icon' onClick='".$lightbox_function."(".$lightbox_count.");'></div>";
-						}
-						if (($slide_data["slide".$i."_popup_type"] == 'VIDEO') && ($slide_data["slide".$i."_popup_video_id"] != '')) {
-							$lightbox_count++;
-							$popup_output =  "<div class='sa_popup_video_icon' onClick='".$lightbox_function."(".$lightbox_count.");'></div>";
-						}
-						if ($slide_data["slide".$i."_popup_type"] == 'HTML') {
-							$lightbox_count++;
-							$popup_output =  "<div class='sa_popup_zoom_icon' onClick='".$lightbox_function."(".$lightbox_count.");'></div>";
-						}
-					}
-
-					// DISPLAY SLIDE OUTPUT
-					//$data_hash = $slide_data['css_id']."_slide".sprintf('%02d', $i);
-					//$output .= "<div class='sa_hover_container' data-hash='".$data_hash."' style='".esc_attr($slide_style)."'>";
-					$css_id = $slide_data['css_id']."_slide".sprintf('%02d', $slide_data["slide".$i."_num"]);
-					$output .= "<div id='".$css_id."' class='sa_hover_container' style='".esc_attr($slide_style)."'>";
-					if (($link_output != '') || ($popup_output != '')) {
-						if ($slide_data['slide_icons_location'] == 'Top Left') {
-							// icons location - top left
-							$style = "top:0px; left:0px; margin:0px;";
-						} elseif ($slide_data['slide_icons_location'] == 'Top Center') {
-							// icons location - top center
-							if (($link_output != '') && ($popup_output != ''))	{ $hov_marginL = '-40px'; }
-							else																{ $hov_marginL = '-20px'; }
-							$style = "top:0px; left:50%; margin-left:".$hov_marginL.";";
-						} elseif ($slide_data['slide_icons_location'] == 'Top Right') {
-							// icons location - top right
-							$style = "top:0px; right:0px; margin:0px;";
-						} elseif ($slide_data['slide_icons_location'] == 'Bottom Left') {
-							// icons location - bottom left
-							$style = "bottom:0px; left:0px; margin:0px;";
-						} elseif ($slide_data['slide_icons_location'] == 'Bottom Center') {
-							// icons location - bottom center
-							if (($link_output != '') && ($popup_output != ''))	{ $hov_marginL = '-40px'; }
-							else																{ $hov_marginL = '-20px'; }
-							$style = "bottom:0px; left:50%; margin-left:".$hov_marginL.";";
-						} elseif ($slide_data['slide_icons_location'] == 'Bottom Right') {
-							// icons location - bottom right
-							$style = "bottom:0px; right:0px; margin:0px;";
-						} else {
-							// icons location - center center (default)
-							if (($link_output != '') && ($popup_output != '')) { $hov_marginL = '-40px'; }
-							else																{ $hov_marginL = '-20px'; }
-							$style = "top:50%; left:50%; margin-top:-20px; margin-left:".$hov_marginL.";";
-						}
-						if ($slide_data['slide_icons_visible'] == 'true') {
-							$output .= "<div class='sa_hover_buttons always_visible' style='".$style."'>";
-						} else {
-							$output .= "<div class='sa_hover_buttons' style='".$style."'>";
-						}
-						if ($link_output != '') {
-							$output .= $link_output;
-						}
-						if ($popup_output != '') {
-							$output .= $popup_output;
-						}
-						$output .= "</div>\n"; // .sa_hover_buttons
-					}
-					$output .= $slide_content."</div>\n"; // .sa_hover_container
 				}
+				$slide_image_size = $slide_data["slide".$i."_image_size"];
+				$slide_image_pos = $slide_data["slide".$i."_image_pos"];
+				$slide_image_repeat = $slide_data["slide".$i."_image_repeat"];
+				$slide_image_color = $slide_data["slide".$i."_image_color"];
+				$slide_style =  "padding:".$slide_data['slide_padding_tb']."% ".$slide_data['slide_padding_lr']."%; ";
+				$slide_style .= "margin:0px ".$slide_data['slide_margin_lr']."%; ";
+				$slide_style .= "background-image:url(\"".$slide_image_src[0]."\"); ";
+				$slide_style .= "background-position:".$slide_image_pos."; ";
+				$slide_style .= "background-size:".$slide_image_size."; ";
+				$slide_style .= "background-repeat:".$slide_image_repeat."; ";
+				$slide_style .= "background-color:".$slide_image_color."; ";
+				if (strpos($slide_data['slide_min_height_perc'], 'px') !== false) {
+					$slide_style .= "min-height:".$slide_data['slide_min_height_perc']."; ";
+				}
+
+				// BUILD SLIDE LINK HOVER BUTTON
+				$link_output = '';
+				if ($slide_data["slide".$i."_link_url"] != '') {
+					$link_output =  "<a class='sa_slide_link_icon' href='".$slide_data["slide".$i."_link_url"]."' ";
+					$link_output .= "target='".$slide_data["slide".$i."_link_target"]."'></a>";
+				}
+
+				// BUILD POPUP HOVER BUTTON - PRO VERSION ONLY!
+				$popup_output = '';
+				if ($sa_pro_version) {
+					if (($slide_data["slide".$i."_popup_type"] == 'IMAGE') && ($slide_data["slide".$i."_popup_image"] != '')) {
+						$lightbox_count++;
+						$popup_output =  "<div class='sa_popup_zoom_icon' onClick='".$lightbox_function."(".$lightbox_count.");'></div>";
+					}
+					if (($slide_data["slide".$i."_popup_type"] == 'VIDEO') && ($slide_data["slide".$i."_popup_video_id"] != '')) {
+						$lightbox_count++;
+						$popup_output =  "<div class='sa_popup_video_icon' onClick='".$lightbox_function."(".$lightbox_count.");'></div>";
+					}
+					if ($slide_data["slide".$i."_popup_type"] == 'HTML') {
+						$lightbox_count++;
+						$popup_output =  "<div class='sa_popup_zoom_icon' onClick='".$lightbox_function."(".$lightbox_count.");'></div>";
+					}
+				}
+
+				// DISPLAY SLIDE OUTPUT
+				//$data_hash = $slide_data['css_id']."_slide".sprintf('%02d', $i);
+				//$output .= "<div class='sa_hover_container' data-hash='".$data_hash."' style='".esc_attr($slide_style)."'>";
+				$css_id = $slide_data['css_id']."_slide".sprintf('%02d', $slide_data["slide".$i."_num"]);
+				$output .= "<div id='".$css_id."' class='sa_hover_container' style='".esc_attr($slide_style)."'>";
+				if (($link_output != '') || ($popup_output != '')) {
+					if ($slide_data['slide_icons_location'] == 'Top Left') {
+						// icons location - top left
+						$style = "top:0px; left:0px; margin:0px;";
+					} elseif ($slide_data['slide_icons_location'] == 'Top Center') {
+						// icons location - top center
+						if (($link_output != '') && ($popup_output != ''))	{ $hov_marginL = '-40px'; }
+						else																{ $hov_marginL = '-20px'; }
+						$style = "top:0px; left:50%; margin-left:".$hov_marginL.";";
+					} elseif ($slide_data['slide_icons_location'] == 'Top Right') {
+						// icons location - top right
+						$style = "top:0px; right:0px; margin:0px;";
+					} elseif ($slide_data['slide_icons_location'] == 'Bottom Left') {
+						// icons location - bottom left
+						$style = "bottom:0px; left:0px; margin:0px;";
+					} elseif ($slide_data['slide_icons_location'] == 'Bottom Center') {
+						// icons location - bottom center
+						if (($link_output != '') && ($popup_output != ''))	{ $hov_marginL = '-40px'; }
+						else																{ $hov_marginL = '-20px'; }
+						$style = "bottom:0px; left:50%; margin-left:".$hov_marginL.";";
+					} elseif ($slide_data['slide_icons_location'] == 'Bottom Right') {
+						// icons location - bottom right
+						$style = "bottom:0px; right:0px; margin:0px;";
+					} else {
+						// icons location - center center (default)
+						if (($link_output != '') && ($popup_output != '')) { $hov_marginL = '-40px'; }
+						else																{ $hov_marginL = '-20px'; }
+						$style = "top:50%; left:50%; margin-top:-20px; margin-left:".$hov_marginL.";";
+					}
+					if ($slide_data['slide_icons_visible'] == 'true') {
+						$output .= "<div class='sa_hover_buttons always_visible' style='".$style."'>";
+					} else {
+						$output .= "<div class='sa_hover_buttons' style='".$style."'>";
+					}
+					if ($link_output != '') {
+						$output .= $link_output;
+					}
+					if ($popup_output != '') {
+						$output .= $popup_output;
+					}
+					$output .= "</div>\n"; // .sa_hover_buttons
+				}
+				if ($slide_data['strip_javascript'] == '1') {
+					// strip JavaScript code (<script> tags) from slide content
+					$slide_content = remove_javascript_from_content($slide_content);
+				}
+				if ($slide_data['lazy_load_images'] == '1') {
+					// modify images (<img> tag) within slide content to enable owl carousel lazy load
+					$slide_content = set_slide_images_to_lazy_load($slide_content);
+				}
+				$output .= $slide_content."</div>\n"; // .sa_hover_container
 			}
 			$output .= "</div>\n";
 			$output .= "</div>\n";
@@ -443,7 +466,11 @@ function slide_anything_shortcode($atts) {
 					$single_item = 0;
 				}
 				$output .= "<script type='text/javascript'>\n";
-				$output .= "	jQuery(document).ready(function() {\n";
+				if ($slide_data['sa_window_onload'] == '1') {
+					$output .= "	jQuery(window).load(function() {\n";
+				} else {
+					$output .= "	jQuery(document).ready(function() {\n";
+				}
 
 				// JQUERY CODE FOR OWN CAROUSEL
 				$output .= "		jQuery('#".esc_attr($slide_data['css_id'])."').owlCarousel({\n";
@@ -492,9 +519,11 @@ function slide_anything_shortcode($atts) {
 				}
 				if ($slide_data['slide_duration'] == 0) {
 					$output .= "			autoplay : false,\n";
+					$output .= "			autoplayHoverPause : false,\n";
 				} else {
 					$output .= "			autoplay : true,\n";
 					$output .= "			autoplayTimeout : ".esc_attr($slide_data['slide_duration']).",\n";
+					$output .= "			autoplayHoverPause : ".esc_attr($slide_data['stop_hover']).",\n";
 				}
 				$output .= "			smartSpeed : ".esc_attr($slide_data['slide_transition']).",\n";
 				$output .= "			fluidSpeed : ".esc_attr($slide_data['slide_transition']).",\n";
@@ -502,17 +531,28 @@ function slide_anything_shortcode($atts) {
 				$output .= "			navSpeed : ".esc_attr($slide_data['slide_transition']).",\n";
 				$output .= "			dotsSpeed : ".esc_attr($slide_data['slide_transition']).",\n";
 				$output .= "			loop : ".esc_attr($slide_data['loop_slider']).",\n";
-				$output .= "			autoplayHoverPause : ".esc_attr($slide_data['stop_hover']).",\n";
 				$output .= "			nav : ".esc_attr($slide_data['nav_arrows']).",\n";
 				$output .= "			navText : ['',''],\n";
 				$output .= "			dots : ".esc_attr($slide_data['pagination']).",\n";
 				$output .= "			responsiveRefreshRate : 200,\n";
-				$output .= "			slideBy : ".esc_attr($slide_data['slide_by']).",\n";
+				if ($slide_data['slide_by'] == 'page') {
+					$output .= "			slideBy : 'page',\n";
+				} else {
+					$output .= "			slideBy : ".esc_attr($slide_data['slide_by']).",\n";
+				}
 				$output .= "			mergeFit : true,\n";
 				//$output .= "			URLhashListener : true,\n";
+				$output .= "			autoHeight : ".esc_attr($slide_data['auto_height']).",\n";
+				if ($slide_data['lazy_load_images'] == '1') {
+					$output .= "			lazyLoad : true,\n";
+					$output .= "			lazyLoadEager: 1,\n";
+				}
 				$output .= "			mouseDrag : ".esc_attr($slide_data['mouse_drag']).",\n";
 				$output .= "			touchDrag : ".esc_attr($slide_data['touch_drag'])."\n";
 				$output .= "		});\n";
+
+				// MAKE SLIDER VISIBLE (AFTER 'WINDOW ONLOAD' OR 'DOCUMENT READY' EVENT)
+				$output .= "		jQuery('#".esc_attr($slide_data['css_id'])."').css('visibility', 'visible');\n";
 
 				// JAVASCRIPT 'WINDOW RESIZE' EVENT TO SET CSS 'min-height' OF SLIDES WITHIN THIS SLIDER
 				$slide_min_height = $slide_data['slide_min_height_perc'];
@@ -616,14 +656,17 @@ function slide_anything_shortcode($atts) {
 					$output .= "		gallery: { enabled: true, tCounter: '' },\n";
 					$output .= "		mainClass: 'sa_popup',\n";
 					$output .= "		closeBtnInside: true,\n";
-					$output .= "		callbacks: {\n";
-					$output .= "			open: function() {\n";
-					$output .= "				jQuery('#".esc_attr($slide_data['css_id'])."').trigger('stop.owl.autoplay');\n";
-					$output .= "			},\n";
-					$output .= "			close: function() {\n";
-					$output .= "				jQuery('#".esc_attr($slide_data['css_id'])."').trigger('play.owl.autoplay');\n";
-					$output .= "			}\n";
-					$output .= "		},\n";
+					$output .= "		fixedContentPos: true,\n";
+					if ($slide_data['slide_duration'] != 0) {
+						$output .= "		callbacks: {\n";
+						$output .= "			open: function() {\n";
+						$output .= "				jQuery('#".esc_attr($slide_data['css_id'])."').trigger('stop.owl.autoplay');\n";
+						$output .= "			},\n";
+						$output .= "			close: function() {\n";
+						$output .= "				jQuery('#".esc_attr($slide_data['css_id'])."').trigger('play.owl.autoplay');\n";
+						$output .= "			}\n";
+						$output .= "		},\n";
+					}
 					$output .= "		type: 'image'\n";
 					$output .= "	});\n";
 					$output .= "});\n";
@@ -642,5 +685,46 @@ function slide_anything_shortcode($atts) {
 		}
 	}
 	return $output;
+}
+
+
+
+// ### STRIP JAVASCRIPT ('<script>' tags) FROM SUPPLIED STRING ARGUMENT ###
+function remove_javascript_from_content($slide_content) {
+	if ($slide_content != '') {
+		$dom = new DOMDocument();
+		$dom->loadHTML($slide_content);
+		$script = $dom->getElementsByTagName('script');
+		$remove = array();
+		foreach($script as $item) {
+			$item->parentNode->removeChild($item);
+		}
+		$slide_content = $dom->saveHTML();
+	}
+	return $slide_content;
+}
+
+
+
+// ### MODIFY IMAGES (<img> tag) WITHIN STRING PASSED (SLIDE CONTENT) TO ENABLE OWL CAROUSEL LAZY LOAD ###
+function set_slide_images_to_lazy_load($slide_content) {
+	// 1) REPLACE 'src=' WITH 'data-src=' WITHIN <IMG> TAGS
+	$slide_content = preg_replace('~<img[^>]*\K(?=src)~i','data-', $slide_content);
+
+	// 2) FOR EACH <IMG> TAG WITHIN THE SLIDE CONTENT, ADD THE 'owl-lazy' CLASS
+	$dom = new DOMDocument();
+	$dom->loadHTML($slide_content);
+	$imgs = $dom->getElementsByTagName('img');
+	foreach ($imgs as $img) {
+		$curr_class = $img->getAttribute('class');
+		if ($curr_class != '') {
+			$img->setAttribute('class', $curr_class.' owl-lazy');
+		} else {
+			$img->setAttribute('class', 'owl-lazy');
+		}
+	}
+	$slide_content = $dom->saveHTML();
+
+	return $slide_content;
 }
 ?>

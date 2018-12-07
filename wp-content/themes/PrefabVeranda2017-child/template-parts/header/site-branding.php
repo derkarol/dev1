@@ -80,7 +80,7 @@
 				<div></div>
 				<div></div>
 					
-				
+				<!-- <O.O> for news card oh header, to edit for some change of titels? -->
 					<?php			
 							while ( $recent_posts->have_posts() ) : $recent_posts->the_post();
 
@@ -98,7 +98,7 @@
 										</a>
 										<a href="' . get_the_permalink(get_the_ID()) . '";>
 											<h3>
-												'. get_the_title (get_option( 'page_for_posts' )) .'
+												'. get_the_title (get_option('page_for_posts' )) .'
 											</h3>
 										</a>								
 										<div class=" ">';

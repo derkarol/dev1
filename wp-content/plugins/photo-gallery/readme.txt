@@ -1,23 +1,23 @@
-=== Photo Gallery by WD - Responsive Photo Gallery ===
-Contributors: webdorado,wdsupport,photogallerysupport
+=== Photo Gallery by 10Web - Responsive Image Gallery ===
+Contributors: webdorado,wdsupport,photogallerysupport,10web
 Tags: gallery, photo gallery, image gallery, responsive gallery, wordpress gallery plugin, photo albums, gallery slider, gallery lightbox, wordpress photo gallery plugin, fullscreen gallery, watermarking, video gallery
 Requires at least: 3.4
 Tested up to: 4.9 
-Stable tag: 1.4.7
+Stable tag: 1.5.11
 License: GPLv2 or later
 License URI: http://www.gnu.org/licenses/gpl-2.0.html
 
-Photo Gallery is a powerful gallery plugin with a list of advanced options for creating stunning image galleries. Add the responsive plugin with cool gallery views.
+Photo Gallery is a powerful image gallery plugin with a list of advanced options for creating responsive image galleries with beautiful lightbox. Add the plugin with cool gallery views.
 
 == Description ==
 
-https://www.youtube.com/watch?v=3u0O9ZdVsGc
+https://www.youtube.com/watch?v=VDKtGHAJVpc
 
 = Useful Links: =  
-[Special Offer for all Premium Plugins](https://web-dorado.com/wordpress-plugins-bundle.html) 
-[WordPress Photo Gallery](https://web-dorado.com/products/wordpress-photo-gallery-plugin.html)  
-[Demo](http://wpdemo.web-dorado.com/photo-gallery/)  
-[User Manual](https://web-dorado.com/wordpress-gallery/installing.html)  
+[Special Offer for all Premium Plugins](https://10web.io/pricing/) 
+[WordPress Photo Gallery](https://10web.io/plugins/wordpress-photo-gallery/)  
+[Demo](https://demo.10web.io/photo-gallery/)  
+[User Manual](https://help.10web.io/hc/en-us/sections/360002159111-Photo-Gallery)  
 [Support Forum](https://wordpress.org/support/plugin/photo-gallery)  
  
 
@@ -82,7 +82,7 @@ Adding photos and videos to the galleries from the WordPress dashboard is simple
 Under the social options tab you’ll find settings for the Instagram and Facebook galleries, where you can specify Instagram feed auto update interval (Premium feature). With the available user roles you can choose who can add/edit galleries, images, albums and tags (Premium feature). 
 
 
-[Premium version adds](https://web-dorado.com/products/wordpress-photo-gallery-plugin.html)  
+[Premium version adds](https://10web.io/plugins/wordpress-photo-gallery/)  
 
 *   Masonry gallery View.
 *   Mosaic gallery View
@@ -99,12 +99,12 @@ Under the social options tab you’ll find settings for the Instagram and Facebo
 *   Possibility of changing the roles of who can edit the galleries/albums/images (Author/All Users)
 
 = Photo Gallery Add-ons =
-[Ecommerce Add-on](https://web-dorado.com/products/wordpress-photo-gallery-plugin/add-ons/gallery-ecommerce.html) - Display your digital content and sell it directly from your website.      
-[Facebook Integration Add-on](https://web-dorado.com/products/wordpress-photo-gallery-plugin/add-ons/facebook.html)  -  Display Facebook photos and videos within Photo Gallery Pro without additional efforts.      
-[Export/Import Add-on](https://web-dorado.com/products/wordpress-photo-gallery-plugin/add-ons/export-import.html)  Export/import galleries, albums and all related data from one WordPress site to another. 
+[Ecommerce Add-on](https://10web.io/plugins/wordpress-photo-gallery/) - Display your digital content and sell it directly from your website.      
+[Facebook Integration Add-on](https://10web.io/plugins/wordpress-photo-gallery/)  -  Display Facebook photos and videos within Photo Gallery Pro without additional efforts.      
+[Export/Import Add-on](https://10web.io/plugins/wordpress-photo-gallery/)  Export/import galleries, albums and all related data from one WordPress site to another. 
 
 ###IMPORTANT:    
-If you think you found a bug in Photo Gallery or have any problem/question concerning the plugin, please check out [Support Forum](https://wordpress.org/support/plugin/photo-gallery) in our website. If you do not find a solution here, do not hesitate to [click here to contact us](https://web-dorado.com/support/contact-us.html).
+If you think you found a bug in Photo Gallery or have any problem/question concerning the plugin, please check out [Support Forum](https://wordpress.org/support/plugin/photo-gallery) in our website. If you do not find a solution here, do not hesitate to [click here to contact us](https://10web.io/contact-us/).
 
 
 == Installation ==
@@ -132,7 +132,7 @@ Login to the WordPress Administrator Panel.
 Activate Photo Gallery by going to Plugins and pressing Activate button.   
 
 
-If any problem occurs with installation of Photo Gallery, [please let us know](https://web-dorado.com/support/contact-us.html). 
+If any problem occurs with installation of Photo Gallery, [please let us know](https://10web.io/contact-us/). 
 
 == Frequently Asked Questions ==
 
@@ -278,6 +278,184 @@ Choose whether to display random or the first/last specific number of images.
 
 
 == Changelog ==
+
+= 1.5.11 =
+* Fixed: Upload image when there is a qoute in the image metadata.   
+* Fixed: Bug on slideshow autoplay.   
+* Fixed: Bug when you put album after a gallery with scroll load.   
+* Fixed: Conflict with "BigSlam" theme.
+* Fixed: Conflict with some ajax themes.   
+* Fixed: PNG and GIF crop.   
+* Fixed: JS error in Elementor editor page.    
+
+= 1.5.10 =
+* Fixed: Closing notification.  
+
+= 1.5.9 =
+* Changed: Pages of Notification to install 10WEB Manager plugin.
+
+= 1.5.8 =
+* Added: Notification to install 10WEB Manager plugin.    
+
+= 1.5.7 =
+* Fixed: Link in gallery/gallery group description.    
+* Fixed: Compatibility with Elementor tabs.    
+* Fixed: Compatibility with ajax load.    
+* Fixed: Sorting images on gallery edit page before saving gallery.    
+* Added: Disable Google fonts.   
+* Added: Get title from image metadata.  
+
+= 1.5.6 =
+* Fixed: Page scroll doesn't work after closing the lightbox on Edge browser.   
+* Fixed: Ampersand in images keyword.   
+* Fixed: Multiple galleries in one page in Elementor preview.   
+* Fixed: Save image added date to gallery as image date instead of last modified date.   
+* Fixed: If you click on the small icon from the WooCommerce product editor to insert shortcode, it shows popup header twice.  
+* Fixed: Remove download button for embedded images.  
+* Added: Add multiple images to gallery on mobile.  
+* Added: Comments pagination under the table.  
+* Added: Date column in comments.  
+  
+= 1.5.5 =
+* Added: How to use button to galleries and gallery groups pages.   
+* Added: Use uploaded image meta tags.   
+* Fixed: Images list toggle button does not work after page update.   
+* Fixed: Bring back "drag and drop" and description columns on small screens.   
+* Fixed: Slideshow view > Disable autoplay doesn't work when Control buttons are disabled and you navigate slide from the filmstrip.  
+* Fixed: Bug with Sticky Nav from Max Mega Menu.  
+* Fixed: Rendering in Elementor builder.   
+* Fixed: Multiple Galleries of the same view in Elementor preview.  
+* Fixed: On Divi, the titles on hover are left aligned.  
+* Fixed: Bulk reset with a large amount of images.   
+* Fixed: Preload for carousel.   
+* Fixed: Old shordcodes convert to Gutenberg.   
+* Fixed: Disable Jetpack photon module for embed thumbnails.   
+* Fixed: Filters are before the gallery title, after performing a filter they are under the gallery description.   
+* Fixed: Youtube embeded video is shown twice in slideshow widget if an effect is selected.   
+
+= 1.5.4 =
+* Changed: Logic of including google fonts.       
+
+= 1.5.3 =
+* Fixed: Gallery widget with all images.     
+
+= 1.5.2 =
+* Fixed: Changed gallery index number on ID.   
+* Fixed: Conflict with lazy load.   
+* Fixed: Slideshow view.   
+
+= 1.5.1 =
+* Fixed: Minor bug   
+
+= 1.5.0 =
+* Added: "Resizable thumbnails" option for all views.  
+* Added: "Distance from container frame" option for all views.  
+* Added: "Zoom" hover effect for all views.  
+* Added: "Title font color (Show on hover)" option for all views.  
+* Added: "Show title on hover / Always show" option for masonry view.  
+* Added: Option to search images by Filename, Alt/Title, the description in the admin section.  
+* Added: Filters for image browser view.  
+* Added: Always show "Redirect URL" column on the gallery edit in the images table.  
+* Added: Ordering for galleries in a gallery group with all galleries list.  
+* Added: "Right-click protection" option on Image browser view.  
+* Improved: Image crop functionality.  
+* Improved: Move inline JS from all views to prevent conflict with some themes.  
+* Improved: Remove static CSS from carousel view to improve load time.  
+* Improved: Logic behind frontend AJAX calls to improve performance.  
+* Improved: Use the largest image file instead of the original image when the original file doesn't exist to prevent errors.  
+* Improved: Gallery edit page load time.  
+* Improved: Disabled the cron functionality in the free version.  
+* Improved: Masonry view HTML / CSS / JS sturcture.  
+* Improved: Mosaic view HTML / CSS / JS sturcture.  
+* Improved: Albums "Back" button styles.  
+* Improved: Filemanager load time.   
+* Improved: Do not add hashtag ids to browser history.  
+* Changed: Pause autoplay when the user is writing a comment.  
+* Changed: Apply Tag filter to image bulk-download.  
+* Changed: Keep active tab in the themes section after updating the settings.  
+* Changed: Removed Horizontal Masonry view.  
+* Fixed: Bug on inserting Photo Gallery shortcode via Text mode of the Editor.  
+* Fixed: Stretched thumbnails bug when Jetpack is enabled.  
+* Fixed: Crop with "Keep aspect ratio" Off.  
+* Fixed: WordFence warnings.  
+* Fixed: When opening a rated image, show a message that image is already rated.  
+* Fixed: Title and description in slideshow view appear only on the first image when the Scale-Out effect is selected.  
+* Fixed: Skipping some images when bulk-uploading images on a slow connection and PHP 7.1.  
+* Fixed: Infinite loading when you click on insert shortcode before the page is fully loaded.  
+* Fixed: Instagram gallery auto-update.  
+* Fixed: Bug with double quotes in Photo Gallery Widget title.  
+* Fixed: Bug on "Select all" in the Comments section when the comments are filtered.  
+* Fixed: Include Google Fonts only when needed.  
+* Fixed: Widgets preview in Elementor builder.   
+* Fixed: The first image is on the left in Slideshow view.   
+* Fixed: Conflict with "WP 1 Slider" plugin.   
+* Fixed: Bug on Comments moderation option.   
+* Fixed: Gallery duplication after Resetting the images with a large number of images.   
+
+= 1.4.17 =
+* Fixed: Bug on widgets added with SiteOrigin builder old versions    
+
+= 1.4.16 =
+* Fixed: Disable cron functionality in free version.    
+* Fixed: Title/description container visibility in lightbox.   
+  
+= 1.4.15 =
+* Fixed: Titles in mosaic view after load more.   
+* Fixed: JS error on slideshow view.    
+* Fixed: Slideshow on IE11.   
+* Fixed: Captcha dose not appear after submit.    
+
+= 1.4.14 =
+* Fixed: Conflict with IE 11 version.   
+* Fixed: Lightbox autoplay.    
+
+= 1.4.13 =
+* Added: Download button functionality related to the filters.  
+* Added: Gutenberg integration.  
+* Added: Recreate thumbnails, set and reset watermark functions actions by Ajax ( part to part by limit 50 ) in options.  
+* Added: Images sorting functionality in gallery edit page.  
+* Changed: Moved Slideshow view inline javascript to js file.  
+* Changed: Remove static css from Slideshow view.  
+* Changed: Check GD2 library availability.  
+* Changed: Thumbnail titles styles in thumbnail view.  
+* Changed: Design of filters in thumbnail view.  
+* Improved: Open lightbox faster.  
+* Improved: How to use.  
+* Fixed: Add shortcode functionality on Beaver, Elementor, SiteOrigin and Visual Composer builders.  
+* Fixed: Bug on setting watermark.  
+* Fixed: Conflict with "Fast Velocity Minify".  
+* Fixed: Filmstrip image ordering  
+* Fixed: Bug on searched images delete in admin.   
+* Fixed: Conflict Wordpress.com hosting.  
+* Fixed: Search logic when the image title contains several words and when you add space before searched word.  
+* Fixed: Bug on scroll load.    
+* Fixed: Add items to gallery group in IE.    
+* Fixed: Slideshow widget bug.   
+* Fixed: Importing to many images from Media library.   
+
+
+= 1.4.12 =
+* Added: GDPR compliance.  
+
+= 1.4.11 =
+* Fixed: Bug on displaying embed media.   
+* Fixed: Bug on opening lightbox with embed media.   
+
+= 1.4.10 =
+* Changed: Separate buttons for deactivation.  
+
+= 1.4.9 =
+* Changed: Links to 10web.io.    
+* Fixed: Bug on slideshow widget.   
+* Fixed: Conflict with minifying plugins.   
+
+= 1.4.8 =
+* Fixed: Pagination type "scroll load" functionality.     
+* Fixed: Album back to previous functionality.   
+* Changed: Remove overview page.      
+* Fixed: Delete temporary zip file after images bulk download.   
+* Fixed: Facebook Images do not resize after lightbox resize.    
+* Added: Gutenberg integration.    
 
 = 1.4.7 =
 * Fixed: Gallery save in some cases.
@@ -1162,7 +1340,7 @@ This vulnerability was discovered by Fortinet's FortiGuard Labs.
 1.  Photo Gallery - Popup View   
 2.  Photo Gallery - Thumbnails View   
 3.  Photo Gallery - Image Browser View 
-4.  Photo Gallery - Mansory View   
-5.  Photo Gallery - Mosaic View   
+4.  Photo Gallery - Mansory View (Premium version)   
+5.  Photo Gallery - Mosaic View (Premium version) 
 6.  Photo Gallery - Edit Global Options   
 7.  Photo Gallery - Edit Watermark   

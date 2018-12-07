@@ -10,7 +10,7 @@ $s_order;
 
 class FilemanagerModel {
   private $controller;
-  private $element_load_count = 100;
+  private $element_load_count = 60;
 
   public function __construct($controller) {
     $this->controller = $controller;
@@ -76,8 +76,7 @@ class FilemanagerModel {
   }
 
   function get_files($sort_by, $sort_order) {
-    $icons_dir_path = BWG()->plugin_dir . '/filemanager/images/file_icons';
-    $icons_dir_url = BWG()->plugin_url . '/filemanager/images/file_icons';
+    $icons_dir_url = BWG()->plugin_url . '/filemanager/images';
     $valid_types = explode(',', isset($_REQUEST['extensions']) ? strtolower(esc_html($_REQUEST['extensions'])) : '*');
     $dir = (isset($_REQUEST['dir']) ? '/' . htmlspecialchars_decode(stripslashes(esc_html(str_replace('../', '', $_REQUEST['dir']))), ENT_COMPAT | ENT_QUOTES) : '');
     $parent_dir = $this->controller->get_uploads_dir() . $dir;
@@ -100,7 +99,6 @@ class FilemanagerModel {
         $file['filename'] = str_replace("_", " ", $file_name);
         $file['type'] = '';
         $file['thumb'] = $icons_dir_url . '/dir.png';
-        $file['icon'] = $icons_dir_url . '/dir.png';
         $file['size'] = '';
         $file['date_modified'] = '';
         $file['resolution'] = '';
@@ -111,16 +109,10 @@ class FilemanagerModel {
         $file['is_dir'] = FALSE;
         $file['name'] = $file_name;
         $filename = substr($file_name, 0, strrpos($file_name, '.'));
-        $file['alt'] = str_replace("_", " ", $filename);
         $file['filename'] = str_replace("_", " ", $filename);
         $file_extension = explode('.', $file_name);
         $file['type'] = strtolower(end($file_extension));
-        $icon = $icons_dir_url . '/' . $file['type'] . '.png';
-        if (file_exists($icons_dir_path . '/' . $file['type'] . '.png') == FALSE) {
-          $icon = $icons_dir_url . '/' . '_blank.png';
-        }
-        $file['thumb'] = $this->is_img($file['type']) ? $parent_dir_url . '/thumb/' . $file_name : $icon;
-        $file['icon'] = $icon;
+        $file['thumb'] = $parent_dir_url . '/thumb/' . $file_name;
         if (($valid_types[0] != '*') && (in_array($file['type'], $valid_types) == FALSE)) {
           continue;
         }
@@ -128,7 +120,7 @@ class FilemanagerModel {
         // $file_size_mb = (int)($file_size_kb / 1024);
         // $file['size'] = $file_size_kb < 1024 ? (string)$file_size_kb . 'KB' : (string)$file_size_mb . 'MB';
         $file['size'] = $file_size_kb . ' KB';
-        $file['date_modified'] = date('d F Y, H:i', filemtime($parent_dir . '/' . $file_name));
+        $file['date_modified'] = date('d F Y, H:i' );
         $image_info = getimagesize(htmlspecialchars_decode($parent_dir . '/' . $file_name, ENT_COMPAT | ENT_QUOTES));
         $file['resolution'] = $this->is_img($file['type']) ? $image_info[0]  . ' x ' . $image_info[1] . ' px' : '';
         $exif = WDWLibrary::read_image_metadata( $parent_dir . '/.original/' . $file_name );
@@ -139,6 +131,8 @@ class FilemanagerModel {
         $file['iso'] = $exif['iso'];
         $file['orientation'] = $exif['orientation'];
         $file['copyright'] = $exif['copyright'];
+        $file['alt'] = BWG()->options->read_metadata && $exif['title'] ? $exif['title'] : str_replace("_", " ", $filename);
+        $file['tags'] = $exif['tags'];
         $files[] = $file;
       }
     }

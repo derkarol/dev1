@@ -3,7 +3,7 @@ Contributors: simonpedge
 Donate link: https://www.paypal.com/cgi-bin/webscr?cmd=_s-xclick&hosted_button_id=RP7JLGK6VT252
 Tags: slider, carousel, content slider, responsive slider, html slider, owl carousel
 Requires at least: 4.0
-Tested up to: 4.9.4
+Tested up to: 4.9.8
 Stable tag: trunk
 License: GPLv2 or later
 License URI: http://www.gnu.org/licenses/gpl-2.0.html
@@ -18,6 +18,7 @@ Slide Anything allows you to create a carousel/slider where the content for each
 
 Slide Anything has now been rebuilt using Owl Carousel 2, and this now provides many improvements and new features:
 
+* New Lazy Load Images - with this feature enabled, slide images (<img> tags) are only loaded when the relevant slides are displayed (all of the slider's images are NOT loaded up-front).
 * Infinite Looping - a much requested Owl Carousel 2 feature, which means that the first slide is now seamlessly displayed after the last slide without any carousel rewind.
 * New Transition Effects - New Owl Carousel transitions include Slide, Fade, Zoom In, Zoom Out, Flip Out X/Y, Rotate Left/Right, Bounce Out, Roll Out and Slide Down.
 * Slide Link Feature - A new feature which allows you to create a hover-over link button for any slide within your carousels.
@@ -25,11 +26,11 @@ Slide Anything has now been rebuilt using Owl Carousel 2, and this now provides 
 
 = Slide Anything PRO =
 
-[SLIDE ANYTHING PRO](http://edgewebpages.com/) adds POPUPS into the mix!!
+[SLIDE ANYTHING PRO](https://edgewebpages.com/) adds POPUPS into the mix!!
 
-With [SLIDE ANYTHING PRO](http://edgewebpages.com/) each slide can now open a MODAL POPUP, which can be an IMAGE popup, a VIDEO EMBED popup (YouTube/Vimeo), a popup containing HTML CODE or a popup displaying a WordPress SHORTCODE. This can be a very useful addition to Slide Anything, if you are wanting to create Image or Video galleries for your websites.
+With [SLIDE ANYTHING PRO](https://edgewebpages.com/) each slide can now open a MODAL POPUP, which can be an IMAGE popup, a VIDEO EMBED popup (YouTube/Vimeo), a popup containing HTML CODE or a popup displaying a WordPress SHORTCODE. This can be a very useful addition to Slide Anything, if you are wanting to create Image or Video galleries for your websites.
 
-For more information about Slide Anything PRO, [CLICK HERE](http://edgewebpages.com/).
+For more information about Slide Anything PRO, [CLICK HERE](https://edgewebpages.com/).
 
 = Owl Carousel =
 
@@ -201,6 +202,49 @@ The `SLIDE STYLE` settings are the style settings for each individual slide with
 = 2.1.5 =
 * Bug Fix - Issue with using shortcodes within slides. Certain shortcodes can only be displayed on the front-end (i.e. required resources are only loaded on the front-end), so the 'Preview Slider' feature on the Edit Slider page was causing issues for these shortcodes. So I have displayed this 'Preview Slider' feature for sliders where the 'Allow Shortcodes' checkbox is checked.
 
+= 2.1.6 =
+* Added a new 'Auto Height' feature, which automatically resizes the height of the slider according to the current slide's height.
+
+= 2.1.7 =
+* Minor bug fix with new 'Auto Height' feature
+
+= 2.1.8 =
+* Added the Slide By 'page' option, which is set by setting the 'Slide By' slider input to 0.
+* For Slide Anything PRO YouTube video popups, added the 'rel=0' paramerter so that related videos are not displayed at the end of a video playback. This has been requested quite a bit, and I have modified the 'Magnific Popup' code so that this parameter is added to the iframe code generated.
+
+= 2.1.9 =
+* Added a new 'Use window.onload event' checkbox setting. By default, Slide Anything loads it JavaSctipt/jQuery code during the 'document.ready' event. If this new option is checked, then the JavaSctipt/jQuery code is loaded during the 'window.onload' event, and this event is only executed after all the assets for the page have been loaded - all images, CSS etc. Using this option solves an issue that sometimes occurs when inserting a Slide Anything slider into a Visual Composer full-width section, and these full-width containers are created/calculated dynamically by adding negative left/right margins to the container after the SA JavaScript/jQuery code is executed.
+
+= 2.1.10 =
+* Minor bug fix for the new 'Use window.onload event' checkbox setting.
+
+= 2.1.11 =
+* Fixed a bug that occurred when migrating a WP site to another domain location (e.g. transferring a staging/test WP site to a Live WP site). The SA slider would not work on the new domain unless it was re-saved in the back-end. This has now been fixed with this release.
+
+= 2.1.12 =
+* Added the new feature (checkbox) 'Remove JavaScript Content'. When checked, JavaScript content (<script> tags) are removed from slide content.
+
+= 2.1.13 =
+* Bug fix - An array initialisation was causing a crash on hosts using a PHP version prior to 5.4. Changed this array initialisation to now be backwards compatible.
+
+= 2.1.14 =
+* Bug fix - Fixed a small bug with the "Remove JavaScript Content" feature.
+
+= 2.1.15 =
+* Upgraded to the latest version of Owl Carousel (version 2.3.4). Set the 'Mouse Drag' option to disabled by default. Mouse dragging when enabled affects vertical touch-drag scrolling on mobile devices.
+
+= 2.1.16 =
+* Small bug fix that relates to Slide Anything PRO only: Sliders with 'autoplay' enabled were re-starting autoplay when popups were closed.
+
+= 2.1.17 =
+* Added a new feature to facilitate owl-carousel 'Lazy Load' images. With this feature enabled, slide images (<img> tags) are only loaded when the relevant slides are displayed (all of the slider's images are NOT loaded up-front).
+
+= 2.1.18 =
+* Bug Fix - There was an issue on mobile phones when autoplay is disabled, and when you swipe to change current slide then autoplay starts up. This has now been fixed.
+
+= 2.1.19 =
+* Small enhancement - The Slide Anything container is now set to hidden (visibility:hidden) until all the slides have been displayed and owl-carousel JavaScript code executed, then the SA container is set to visible (visibility:visible). This presents a cleaner page loading experience without the individual slide containers (DIVS) sometimes being displayed (even for a fraction of a second) prior to slider initialisation.
+
 == Upgrade Notice ==
 
 = 1.0 =
@@ -317,3 +361,46 @@ The `SLIDE STYLE` settings are the style settings for each individual slide with
 
 = 2.1.5 =
 * Bug Fix - Issue with using shortcodes within slides. Certain shortcodes can only be displayed on the front-end (i.e. required resources are only loaded on the front-end), so the 'Preview Slider' feature on the Edit Slider page was causing issues for these shortcodes. So I have displayed this 'Preview Slider' feature for sliders where the 'Allow Shortcodes' checkbox is checked.
+
+= 2.1.6 =
+* Added a new 'Auto Height' feature, which automatically resizes the height of the slider according to the current slide's height.
+
+= 2.1.7 =
+* Minor bug fix with new 'Auto Height' feature
+
+= 2.1.8 =
+* Added the Slide By 'page' option, which is set by setting the 'Slide By' slider input to 0.
+* For Slide Anything PRO YouTube video popups, added the 'rel=0' paramerter so that related videos are not displayed at the end of a video playback. This has been requested quite a bit, and I have modified the 'Magnific Popup' code so that this parameter is added to the iframe code generated.
+
+= 2.1.9 =
+* Added a new 'Use window.onload event' checkbox setting. By default, Slide Anything loads it JavaSctipt/jQuery code during the 'document.ready' event. If this new option is checked, then the JavaSctipt/jQuery code is loaded during the 'window.onload' event, and this event is only executed after all the assets for the page have been loaded - all images, CSS etc. Using this option solves an issue that sometimes occurs when inserting a Slide Anything slider into a Visual Composer full-width section, and these full-width containers are created/calculated dynamically by adding negative left/right margins to the container after the SA JavaScript/jQuery code is executed.
+
+= 2.1.10 =
+* Minor bug fix for the new 'Use window.onload event' checkbox setting.
+
+= 2.1.11 =
+* Fixed a bug that occurred when migrating a WP site to another domain location (e.g. transferring a staging/test WP site to a Live WP site). The SA slider would not work on the new domain unless it was re-saved in the back-end. This has now been fixed with this release. 
+
+= 2.1.12 =
+* Added the new feature (checkbox) 'Remove JavaScript Content'. When checked, JavaScript content (<script> tags) are removed from slide content.
+
+= 2.1.13 =
+* Bug fix - An array initialisation was causing a crash on hosts using a PHP version prior to 5.4. Changed this array initialisation to now be backwards compatible.
+
+= 2.1.14 =
+* Bug fix - Fixed a small bug with the "Remove JavaScript Content" feature.
+
+= 2.1.15 =
+* Upgraded to the latest version of Owl Carousel (version 2.3.4). Set the 'Mouse Drag' option to disabled by default. Mouse dragging when enabled affects vertical touch-drag scrolling on mobile devices.
+
+= 2.1.16 =
+* Small bug fix that relates to Slide Anything PRO only: Sliders with 'autoplay' enabled were re-starting autoplay when popups were closed.
+
+= 2.1.17 =
+* Added a new feature to facilitate owl-carousel 'Lazy Load' images. With this feature enabled, slide images (<img> tags) are only loaded when the relevant slides are displayed (all of the slider's images are NOT loaded up-front).
+
+= 2.1.18 =
+* Bug Fix - There was an issue on mobile phones when autoplay is disabled, and when you swipe to change current slide then autoplay starts up. This has now been fixed.
+
+= 2.1.19 =
+* Small enhancement - The Slide Anything container is now set to hidden (visibility:hidden) until all the slides have been displayed and owl-carousel JavaScript code executed, then the SA container is set to visible (visibility:visible). This presents a cleaner page loading experience without the individual slide containers (DIVS) sometimes being displayed (even for a fraction of a second) prior to slider initialisation.

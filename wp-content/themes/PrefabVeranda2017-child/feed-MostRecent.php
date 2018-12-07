@@ -81,14 +81,14 @@ do_action( 'rss_tag_pre', 'rss2' );
 	 * @since 2.0.0
 	 */
 	do_action( 'rss2_head');
-	
 
 	while( have_posts()) : the_post();
 	?>
 	<item>
 		<title><?php the_title_rss() ?></title>
 		<link><?php the_permalink_rss() ?></link>
-		<enclosure url="<?php echo esc_url( $postimage ); ?>" type="image/jpeg" /> 
+		<enclosure url="<?php echo esc_url( $postimage ); ?>" type="image/jpeg" />
+		<?php /*?><media:content url="<?php echo esc_url( $postimage ); ?>" medium="image" > <?php */?><!--I TRY THIS FOR MC  <O.O>-->
 		<comments><?php comments_link_feed(); ?></comments>
 		<pubDate><?php echo mysql2date('D, d M Y H:i:s +0000', get_post_time('Y-m-d H:i:s', true), false); ?></pubDate>
 		<dc:creator><![CDATA[<?php the_author() ?>]]></dc:creator>

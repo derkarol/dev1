@@ -126,7 +126,7 @@ global $twentyseventeencounter;
 
 							<?php // Show four most recent posts.
 							$recent_posts = new WP_Query( array(
-								'posts_per_page'      => 1,// <O.O>
+								'posts_per_page'      => 3,// <O.O>
 								'post_status'         => 'publish',
 								'ignore_sticky_posts' => true,
 								'no_found_rows'       => true,

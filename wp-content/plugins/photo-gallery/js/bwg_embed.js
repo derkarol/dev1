@@ -11,7 +11,7 @@ function spider_display_embed(embed_type, file_url, embed_id, attrs) {
     case 'EMBED_OEMBED_YOUTUBE_VIDEO':
       var oembed_youtube_html ='<iframe ';
       if(embed_id!=''){
-        oembed_youtube_html += ' src="' + '//www.youtube.com/embed/'+embed_id + '?enablejsapi=1&wmode=transparent"';
+        oembed_youtube_html += ' src="' + '//www.youtube.com/embed/'+ embed_id + '?enablejsapi=1&wmode=transparent"';
       }
       for (attr in attrs) {
         if(!(/src/i).test(attr)){
@@ -41,7 +41,6 @@ function spider_display_embed(embed_type, file_url, embed_id, attrs) {
             
       break;
     case 'EMBED_OEMBED_FLICKR_IMAGE':
-
         var oembed_flickr_html ='<div ';     
         for (attr in attrs) {
         if(!(/src/i).test(attr)){
@@ -60,8 +59,6 @@ function spider_display_embed(embed_type, file_url, embed_id, attrs) {
         '; width:'+'auto !important'+
         '; height:'+ 'auto !important' + 
         ';">';
-        
-
         }
 
         oembed_flickr_html +="</div>";
@@ -162,7 +159,7 @@ function spider_display_embed(embed_type, file_url, embed_id, attrs) {
         html_to_insert += oembed_instagram_html;
     break;       
 	case 'EMBED_OEMBED_FACEBOOK_IMAGE':
-      var oembed_facebook_html ='<div ';     
+      var oembed_facebook_html ='<span ';	
         for (attr in attrs) {
           if(!(/src/i).test(attr)){
             if(attr != '' && attrs[attr] != ''){
@@ -180,7 +177,7 @@ function spider_display_embed(embed_type, file_url, embed_id, attrs) {
         '; height:'+ '100%' +
         ';">';
       }
-      oembed_facebook_html +="</div>";
+      oembed_facebook_html +="</span>";
       html_to_insert += oembed_facebook_html;
     break; 	
 	case 'EMBED_OEMBED_FACEBOOK_VIDEO': 
@@ -308,7 +305,7 @@ function bwg_add_instagram_gallery(instagram_access_token, from_popup){
     'async':true
   };
 
-   // get response data. Here we use the server as a proxy, since Cross-Origin Resource Sharing AJAX is forbidden.
+   /* get response data. Here we use the server as a proxy, since Cross-Origin Resource Sharing AJAX is forbidden. */
   jQuery.post(ajax_url, data, function(response) {
     if ( response == false ) {
       alert('Error: cannot get response from the server.');
